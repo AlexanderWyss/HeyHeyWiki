@@ -1,0 +1,46 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>Login</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <div class="container">
+        <div class="loginContainer">
+            <ion-grid>
+                <ion-row>
+                    <ion-col>
+                        <ion-title>Login</ion-title>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col>
+                        <ion-item>
+                            <ion-label position="floating">Email</ion-label>
+                            <ion-input type="email" [(ngModel)]="email"></ion-input>
+                        </ion-item>
+                        <ion-item>
+                            <ion-label position="floating">Passwort</ion-label>
+                            <ion-input type="password" [(ngModel)]="password"></ion-input>
+                        </ion-item>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col>
+                        <ion-item lines="none">
+                            <a routerLink="/register" slot="start">Sign up</a>
+                            <ion-button (click)="login()" slot="end" size="default">Login</ion-button>
+                        </ion-item>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col>
+                        <ion-item *ngIf="validation" lines="none" class="error no-margin">
+                            {{validation}}
+                        </ion-item>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </div>
+    </div>
+</ion-content>
