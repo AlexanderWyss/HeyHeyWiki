@@ -1,5 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
-import { HeaderSidebarComponent } from '../components/header-sidebar/header-sidebar.component';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-home',
@@ -8,5 +7,6 @@ import { HeaderSidebarComponent } from '../components/header-sidebar/header-side
 })
 export class HomePage {
 
-  constructor() {}
+  constructor() {
+  }
 }
