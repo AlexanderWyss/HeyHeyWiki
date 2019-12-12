@@ -15,7 +15,7 @@ export class HomePage implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.firestore.getSubWikis().subscribe(value => console.log(value[0].data()));
+    this.firestore.getSubWikis().subscribe(value => console.log(value));
   }
 
   ionViewWillEnter() {

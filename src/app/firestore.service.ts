@@ -1,51 +1,67 @@
 import {Injectable} from '@angular/core';
-import {AngularFirestore, DocumentReference, DocumentSnapshot, QueryDocumentSnapshot} from '@angular/fire/firestore';
-import {AngularFireStorage, AngularFireUploadTask} from '@angular/fire/storage';
+import {
+    Action,
+    AngularFirestore,
+    AngularFirestoreCollection, DocumentChangeAction,
+    DocumentReference,
+    DocumentSnapshot
+} from '@angular/fire/firestore';
+import {AngularFireStorage} from '@angular/fire/storage';
 import {SubWiki} from './_models/sub-wiki';
-import {flatMap, map, take} from 'rxjs/operators';
-import {Observable} from 'rxjs';
-import {UploadTask} from '@angular/fire/storage/interfaces';
+import {map} from 'rxjs/operators';
+import {Observable, OperatorFunction} from 'rxjs';
 import {SubWikiContent} from './_models/sub-wiki-content';
 
 @Injectable({
     providedIn: 'root'
 })
 export class FirestoreService {
-    private readonly subwikiCollection = 'subwiki';
-    private readonly contentCollection = 'content';
+    private readonly subwikiCollection: AngularFirestoreCollection<SubWiki>;
+    private readonly contentCollection: AngularFirestoreCollection<SubWikiContent>;
+    private subwikis: Observable<SubWiki[]>;
 
 
     constructor(private fireStore: AngularFirestore, private storage: AngularFireStorage) {
+        this.subwikiCollection = this.fireStore.collection('subwiki');
+        this.subwikis = this.subwikiCollection.snapshotChanges().pipe(this.mapCollection());
+        this.contentCollection = this.fireStore.collection('content');
     }
 
     public resolveStorageRev(ref: string) {
         return this.storage.ref(ref).getDownloadURL();
     }
 
-    public getSubWikis(): Observable<QueryDocumentSnapshot<SubWiki>[]> {
-        return this.fireStore.collection(this.subwikiCollection).snapshotChanges()
-            .pipe(map(this.mapFromCollection())) as Observable<QueryDocumentSnapshot<SubWiki>[]>;
+    public getSubWikis(): Observable<SubWiki[]> {
+        return this.subwikis;
     }
 
-    public getSubWiki(id: string): Observable<DocumentSnapshot<SubWiki>> {
-        return this.fireStore.collection(this.subwikiCollection).doc(id).snapshotChanges()
-            .pipe(map(this.mapFromDoc())) as Observable<DocumentSnapshot<SubWiki>>;
+    public getSubWiki(id: string): Observable<SubWiki> {
+        return this.subwikiCollection.doc(id).snapshotChanges().pipe(this.mapDoc());
     }
 
     public createSubWiki(subwiki: SubWiki): Promise<DocumentReference> {
-        return this.fireStore.collection(this.subwikiCollection).add(subwiki);
+        return this.subwikiCollection.add(subwiki);
     }
 
     public getContent(id: string): Observable<DocumentSnapshot<SubWikiContent>> {
-        return this.fireStore.collection(this.contentCollection).doc(id).snapshotChanges()
-            .pipe(map(this.mapFromDoc())) as Observable<DocumentSnapshot<SubWikiContent>>;
+        return this.contentCollection.doc(id).snapshotChanges().pipe(this.mapDoc());
     }
 
-    private mapFromCollection() {
-        return value => value.map(val => val.payload.doc);
+    private mapCollection<T extends DocumentChangeAction<any>, R>(): OperatorFunction<T[], R[]> {
+        return map(list => list.map(value => {
+            const doc = value.payload.doc;
+            const id = doc.id;
+            const data = doc.data();
+            return {id, ...data} as unknown as R;
+        }));
     }
 
-    private mapFromDoc() {
-        return value => value.payload;
+    private mapDoc<T extends Action<any>, R>(): OperatorFunction<T, R> {
+        return map(value => {
+            const doc = value.payload;
+            const id = doc.id;
+            const data = doc.data();
+            return {id, ...data} as unknown as R;
+        });
     }
 }
