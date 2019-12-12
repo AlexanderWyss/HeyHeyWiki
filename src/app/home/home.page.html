@@ -4,11 +4,32 @@
       <img class="toolbar-logo" src="../../assets/images/wickie_snap.png" alt="Wicke snap">
     </ion-buttons>
     <ion-title>
-      Home
+      Browse Subwikis
     </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="signUp()">
+        Sign up
+      </ion-button>
+      <ion-button (click)="login()">
+        Login
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
+  <ion-searchbar class="searchbar ion-padding" placeholder="Search Subwikis" inputmode="text" type="text" (ionChange)="onSubwikiSearchChange($event)"
+    [debounce]="250"></ion-searchbar>
+  <ion-row>
+    <ion-col size="4">
+      <ion-card class="subwiki-card">
+        <ion-card-content>
+          Image
+        </ion-card-content>
+        <ion-card-header>
+          <ion-card-title>Name</ion-card-title>
+        </ion-card-header>
+      </ion-card>
+    </ion-col>
+  </ion-row>
 </ion-content>
