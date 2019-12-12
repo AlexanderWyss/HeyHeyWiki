@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FirestoreService } from '../firestore.service';
-import { MenuController } from '@ionic/angular';
+import { MenuController, NavController } from '@ionic/angular';
 import { SubWiki } from '../_models/sub-wiki';
 
 @Component({
@@ -16,6 +16,7 @@ export class HomePage implements OnInit {
   constructor(
     private firestore: FirestoreService,
     private menuController: MenuController,
+    private navController: NavController,
   ) { }
 
   ngOnInit(): void {
@@ -27,6 +28,14 @@ export class HomePage implements OnInit {
 
   ionViewWillEnter() {
     this.menuController.enable(false);
+  }
+  
+  signUp() {
+    this.navController.navigateForward('register');
+  }
+
+  login() {
+    this.navController.navigateForward('login');
   }
 
   onSubwikiSearchChange(event: any) {
