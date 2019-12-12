@@ -18,18 +18,18 @@
 </ion-header>
 
 <ion-content>
-  <ion-searchbar class="searchbar ion-padding" placeholder="Search Subwikis" inputmode="text" type="text" (ionChange)="onSubwikiSearchChange($event)"
-    [debounce]="250"></ion-searchbar>
-  <ion-row>
-    <ion-col size="4">
-      <ion-card class="subwiki-card">
+  <ion-searchbar class="searchbar ion-padding" placeholder="Search Subwikis" inputmode="text" type="text"
+    (ionChange)="onSubwikiSearchChange($event)" [debounce]="100"></ion-searchbar>
+  <div class="subwiki-flex-container">
+    <div *ngFor="let subwiki of this.searchableSubwikis">
+      <ion-card class="subwiki-card" (click)="openSubwiki()">
         <ion-card-content>
-          Image
+          <img src="{{ subwiki.imageRef }}" alt="SubWiki Preview Image">
         </ion-card-content>
         <ion-card-header>
-          <ion-card-title>Name</ion-card-title>
+          <ion-card-title>{{ subwiki.name }}</ion-card-title>
         </ion-card-header>
       </ion-card>
-    </ion-col>
-  </ion-row>
+    </div>
+  </div>
 </ion-content>

@@ -8,6 +8,25 @@
   padding-bottom: 2px;
 }
 
-.subwiki-card {
-  text-align: center;
+.subwiki-flex-container {
+  padding: 6px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  div {
+    width: calc(100% / 3);
+    .subwiki-card {
+      text-align: center;
+      cursor: pointer;
+      ion-card-content {
+        height: 115px;
+        padding: 0;
+        border-bottom: solid 1px #e0e0e0;
+        img {
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+    }
+  }
 }
