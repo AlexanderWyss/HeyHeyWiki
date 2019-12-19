@@ -1,9 +1,33 @@
-.toolbar-logo {
-  height: 50px;
-  margin-left: 10px;
+.toolbar {
+  .toolbar-logo {
+    height: 50px;
+    margin-left: 10px;
+  }
+  .buttons {
+    margin: 0;
+    height: 56px;
+    ion-button {
+      height: 100%;
+      margin: 0;
+      --padding-end: 25px;
+      --padding-start: 25px;
+    }
+  }
+}
+
+.content-container {
+  text-align: center;
+  .content {
+    display: inline-block;
+    width: 100%;
+    @media only screen and (min-width: 1024px) {
+      width: 1024px;
+    }
+  }
 }
 
 .searchbar {
+  text-align: left;
   --padding-bottom: 2px;
   padding-bottom: 2px;
 }

@@ -1,12 +1,12 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar class="toolbar">
     <ion-buttons slot="start">
       <img class="toolbar-logo" src="../../assets/images/wickie_snap.png" alt="Wicke snap">
     </ion-buttons>
     <ion-title>
       Browse Subwikis
     </ion-title>
-    <ion-buttons slot="end">
+    <ion-buttons slot="end" class="buttons" *ngIf="!this.isLoggedIn">
       <ion-button (click)="signUp()">
         Sign up
       </ion-button>
@@ -14,22 +14,29 @@
         Login
       </ion-button>
     </ion-buttons>
+    <ion-buttons slot="end" class="buttons" *ngIf="this.isLoggedIn">
+      <ion-button (click)="logout()">
+        Logout
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <ion-searchbar class="searchbar ion-padding" placeholder="Search Subwikis" inputmode="text" type="text"
-    (ionChange)="onSubwikiSearchChange($event)" [debounce]="100"></ion-searchbar>
-  <div class="subwiki-flex-container">
-    <div *ngFor="let subwiki of this.searchableSubwikis">
-      <ion-card class="subwiki-card" (click)="openSubwiki()">
-        <ion-card-content>
-          <img src="{{ subwiki.imageRef }}" alt="SubWiki Preview Image">
-        </ion-card-content>
-        <ion-card-header>
-          <ion-card-title>{{ subwiki.name }}</ion-card-title>
-        </ion-card-header>
-      </ion-card>
+<ion-content class="content-container">
+  <div class="content">
+    <ion-searchbar class="searchbar ion-padding" placeholder="Search Subwikis" inputmode="text" type="text"
+      (ionChange)="onSubwikiSearchChange($event)" [debounce]="100"></ion-searchbar>
+    <div class="subwiki-flex-container">
+      <div *ngFor="let subwiki of this.searchableSubwikis">
+        <ion-card class="subwiki-card" (click)="openSubwiki()">
+          <ion-card-content>
+            <img src="{{ subwiki.imageRef }}" alt="SubWiki Preview Image">
+          </ion-card-content>
+          <ion-card-header>
+            <ion-card-title>{{ subwiki.name }}</ion-card-title>
+          </ion-card-header>
+        </ion-card>
+      </div>
     </div>
   </div>
 </ion-content>

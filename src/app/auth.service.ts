@@ -2,14 +2,18 @@ import {Injectable} from '@angular/core';
 import {AngularFireAuth} from '@angular/fire/auth';
 import * as firebase from 'firebase';
 import {Router} from '@angular/router';
+import { NavController } from '@ionic/angular';
 
 @Injectable({
     providedIn: 'root'
 })
 export class AuthService {
 
-    constructor(private auth: AngularFireAuth, private router: Router) {
-    }
+    constructor(
+        private auth: AngularFireAuth,
+        private router: Router,
+        private navController: NavController,
+        ) { }
 
     public login(email: string, password: string): Promise<firebase.auth.UserCredential> {
         return this.auth.auth.signInWithEmailAndPassword(email, password).then(credentials => {
@@ -32,7 +36,9 @@ export class AuthService {
     }
 
     private navigateHome() {
-        this.router.navigateByUrl('/home').catch(err => console.error(err));
+        console.log
+        this.navController.navigateRoot('home')
+            .catch(err => console.error(err));
     }
 
     public getUser() {
