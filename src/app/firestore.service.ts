@@ -11,6 +11,7 @@ import {SubWiki} from './_models/sub-wiki';
 import {map} from 'rxjs/operators';
 import {Observable, OperatorFunction} from 'rxjs';
 import {SubWikiContent} from './_models/sub-wiki-content';
+import {ReemittingObserver} from './ReemittingObserver';
 
 @Injectable({
     providedIn: 'root'
@@ -18,12 +19,12 @@ import {SubWikiContent} from './_models/sub-wiki-content';
 export class FirestoreService {
     private readonly subwikiCollection: AngularFirestoreCollection<SubWiki>;
     private readonly contentCollection: AngularFirestoreCollection<SubWikiContent>;
-    private subwikis: Observable<SubWiki[]>;
+    private subwikis: ReemittingObserver<SubWiki[]>;
 
 
     constructor(private fireStore: AngularFirestore, private storage: AngularFireStorage) {
         this.subwikiCollection = this.fireStore.collection('subwiki');
-        this.subwikis = this.subwikiCollection.snapshotChanges().pipe(this.mapCollection());
+        this.subwikis = new ReemittingObserver(this.subwikiCollection.snapshotChanges().pipe(this.mapCollection()));
         this.contentCollection = this.fireStore.collection('content');
     }
 
@@ -31,7 +32,7 @@ export class FirestoreService {
         return this.storage.ref(ref).getDownloadURL();
     }
 
-    public getSubWikis(): Observable<SubWiki[]> {
+    public getSubWikis(): ReemittingObserver<SubWiki[]> {
         return this.subwikis;
     }
 

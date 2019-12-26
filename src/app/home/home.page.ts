@@ -20,14 +20,16 @@ export class HomePage implements OnInit {
     }
 
     ngOnInit(): void {
+
+    }
+
+
+    ionViewWillEnter() {
+        this.menuController.enable(false);
         this.firestore.getSubWikis().subscribe(subwikis => {
             this.subwikis = subwikis;
             this.searchableSubwikis = this.subwikis;
         });
-    }
-
-    ionViewWillEnter() {
-        this.menuController.enable(false);
     }
 
     onSubwikiSearchChange(event: any) {
