@@ -1,0 +1,17 @@
+.toolbar {
+  .toolbar-logo {
+    height: 50px;
+    margin-left: 10px;
+    cursor: pointer;
+  }
+  .buttons {
+    margin: 0;
+    height: 56px;
+    ion-button {
+      height: 100%;
+      margin: 0;
+      --padding-end: 25px;
+      --padding-start: 25px;
+    }
+  }
+}

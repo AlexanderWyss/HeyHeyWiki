@@ -1,26 +1,4 @@
-<ion-header>
-  <ion-toolbar class="toolbar">
-    <ion-buttons slot="start">
-      <img class="toolbar-logo" src="../../assets/images/wickie_snap.png" alt="Wicke snap">
-    </ion-buttons>
-    <ion-title>
-      Browse Subwikis
-    </ion-title>
-    <ion-buttons slot="end" class="buttons" *ngIf="!this.isLoggedIn">
-      <ion-button (click)="signUp()">
-        Sign up
-      </ion-button>
-      <ion-button (click)="login()">
-        Login
-      </ion-button>
-    </ion-buttons>
-    <ion-buttons slot="end" class="buttons" *ngIf="this.isLoggedIn">
-      <ion-button (click)="logout()">
-        Logout
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+<app-header title="Browse Subwikis"></app-header>
 
 <ion-content class="content-container">
   <div class="content">

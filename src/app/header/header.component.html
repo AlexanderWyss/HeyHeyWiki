@@ -1,0 +1,24 @@
+<ion-header>
+    <ion-toolbar class="toolbar">
+        <ion-buttons slot="start">
+            <img class="toolbar-logo" src="../../assets/images/wickie_snap.png" alt="Wicke snap" (click)="home()">
+        </ion-buttons>
+        <ion-title>
+            {{title}}
+        </ion-title>
+        <ion-buttons slot="end" class="buttons" *ngIf="!this.user">
+            <ion-button (click)="signUp()">
+                Sign up
+            </ion-button>
+            <ion-button (click)="login()">
+                Login
+            </ion-button>
+        </ion-buttons>
+        <ion-buttons slot="end" class="buttons" *ngIf="this.user">
+            <ion-label>{{this.user}}</ion-label>
+            <ion-button (click)="logout()">
+                Logout
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>

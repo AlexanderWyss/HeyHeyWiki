@@ -36,7 +36,6 @@ export class AuthService {
     }
 
     private navigateHome() {
-        console.log
         this.navController.navigateRoot('home')
             .catch(err => console.error(err));
     }
