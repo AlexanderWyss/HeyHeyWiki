@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../auth.service';
+import {MenuController} from '@ionic/angular';
 
 @Component({
     selector: 'app-register',
@@ -12,10 +13,15 @@ export class RegisterPage implements OnInit {
     repeatePassword: string;
     validation: string;
 
-    constructor(private auth: AuthService) {
+    constructor(private auth: AuthService,
+                private menuController: MenuController) {
     }
 
     ngOnInit() {
+    }
+
+    ionViewWillEnter() {
+        this.menuController.enable(false);
     }
 
     signUp() {
@@ -24,7 +30,7 @@ export class RegisterPage implements OnInit {
             if (this.password === this.repeatePassword) {
                 this.auth.signUp(this.email, this.password).catch(msg => this.validation = msg);
             } else {
-              this.validation = 'Passwörter stimmen nicht überein.';
+                this.validation = 'Passwörter stimmen nicht überein.';
             }
         } else {
             this.validation = 'Bitte füllen Sie alle Felder aus.';

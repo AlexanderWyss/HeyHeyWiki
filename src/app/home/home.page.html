@@ -6,7 +6,7 @@
       (ionChange)="onSubwikiSearchChange($event)" [debounce]="100"></ion-searchbar>
     <div class="subwiki-flex-container">
       <div *ngFor="let subwiki of this.searchableSubwikis">
-        <ion-card class="subwiki-card" (click)="openSubwiki()">
+        <ion-card class="subwiki-card" (click)="openSubwiki(subwiki)">
           <ion-card-content>
             <img src="{{ subwiki.imageRef }}" alt="SubWiki Preview Image">
           </ion-card-content>

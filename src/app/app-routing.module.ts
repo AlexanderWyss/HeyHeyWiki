@@ -23,6 +23,14 @@ const routes: Routes = [
     path: 'logout',
     loadChildren: () => import('./logout/logout.module').then( m => m.LogoutPageModule)
   },
+  {
+    path: 'subwiki/:name',
+    loadChildren: () => import('./subwiki/subwiki.module').then( m => m.SubwikiPageModule)
+  },
+  {
+    path: 'subwiki/:name/:page',
+    loadChildren: () => import('./subwiki/subwiki.module').then( m => m.SubwikiPageModule)
+  },
 ];
 
 @NgModule({

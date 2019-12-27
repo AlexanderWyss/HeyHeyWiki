@@ -4,7 +4,7 @@ import {
     AngularFirestore,
     AngularFirestoreCollection, DocumentChangeAction,
     DocumentReference,
-    DocumentSnapshot
+    DocumentSnapshot, QuerySnapshot
 } from '@angular/fire/firestore';
 import {AngularFireStorage} from '@angular/fire/storage';
 import {SubWiki} from './_models/sub-wiki';
@@ -40,6 +40,18 @@ export class FirestoreService {
         return this.subwikiCollection.doc(id).snapshotChanges().pipe(this.mapDoc());
     }
 
+    public getSubWikiByName(name: string): Promise<SubWiki> {
+        return this.subwikiCollection.ref.where('name', '==', name).limit(1).get().then(this.mapGet()).then(mapped => {
+            return mapped[0] as SubWiki;
+        });
+    }
+
+    public getContentByName(name: string): Promise<SubWikiContent> {
+        return this.getSubWikiByName(name).then(subwiki =>
+            this.contentCollection.ref.doc(subwiki.contentRef).get().then(this.mapDocGet())
+        );
+    }
+
     public createSubWiki(subwiki: SubWiki): Promise<DocumentReference> {
         return this.subwikiCollection.add(subwiki);
     }
@@ -64,5 +76,23 @@ export class FirestoreService {
             const data = doc.data();
             return {id, ...data} as unknown as R;
         });
+    }
+
+    private mapGet<T, R>(): ((value: QuerySnapshot<T>) => R[]) {
+        return list => {
+            return list.docs.map(doc => {
+                const id = doc.id;
+                const data = doc.data();
+                return {id, ...data} as unknown as R;
+            });
+        };
+    }
+
+    private mapDocGet<T, R>(): ((value: DocumentSnapshot<T>) => R) {
+        return doc => {
+            const id = doc.id;
+            const data = doc.data();
+            return {id, ...data} as unknown as R;
+        };
     }
 }

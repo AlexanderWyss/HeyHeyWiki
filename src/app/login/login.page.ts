@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../auth.service';
+import {MenuController} from '@ionic/angular';
 
 @Component({
     selector: 'app-login',
@@ -11,10 +12,14 @@ export class LoginPage implements OnInit {
     password: string;
     validation: string;
 
-    constructor(private auth: AuthService) {
+    constructor(private auth: AuthService, private menuController: MenuController) {
     }
 
     ngOnInit() {
+    }
+
+    ionViewWillEnter() {
+        this.menuController.enable(false);
     }
 
     login() {
