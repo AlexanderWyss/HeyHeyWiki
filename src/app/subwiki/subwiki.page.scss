@@ -1,0 +1,12 @@
+.grid {
+  ion-col {
+    border-right: thin solid black;
+    border-bottom: thin solid black;
+  }
+  ion-col:first-of-type {
+    border-left: thin solid black;
+  }
+  ion-row:first-of-type ion-col {
+    border-top: thin solid black;
+  }
+}

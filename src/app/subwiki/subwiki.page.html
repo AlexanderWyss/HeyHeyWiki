@@ -1,5 +1,86 @@
+<!--suppress TypeScriptValidateTypes -->
 <app-header [title]="subwiki?.name"></app-header>
 
 <ion-content>
+    <ion-fab vertical="top" horizontal="end" slot="fixed">
+        <ion-row>
+            <ion-col>
 
+                <ion-fab-button size="small" (click)="toggleEditing()">
+                    <ion-icon [name]="editing ? 'checkmark' : 'create'"></ion-icon>
+                </ion-fab-button>
+            </ion-col>
+            <ion-col>
+                <ion-fab-button size="small" *ngIf="editing" (click)="addParagraph()">
+                    <ion-icon name="add"></ion-icon>
+                </ion-fab-button>
+            </ion-col>
+        </ion-row>
+    </ion-fab>
+    <div>
+        <div *ngFor="let paragraph of page.paragraphs; let paragraphKey = index">
+            <ion-item>
+                <h2 *ngIf="!editing">{{paragraph.title}}</h2>
+                <ion-input *ngIf="editing" [(ngModel)]="paragraph.title" placeholder="Title"></ion-input>
+            </ion-item>
+            <div *ngFor="let node of paragraph.nodes; let nodeKey = index">
+                <div *ngIf="node.type === 'text'">
+                    <div>
+                        <quill-editor *ngIf="node.editing" [(ngModel)]="node.value" [sanitize]="true"></quill-editor>
+                    </div>
+                    <quill-view *ngIf="!node.editing" [content]="node.value"
+                                (click)="startEditing(node)"></quill-view>
+                </div>
+                <div class="grid" *ngIf="node.type === 'grid'">
+                    <ion-grid (click)="startEditing(node)">
+                        <ion-row *ngFor="let row of asRowArray(node.value); let rowIndex = index">
+                            <ion-col *ngFor="let cell of row.cells; let colIndex = index">
+                                <p *ngIf="!node.editing">{{cell.value}}</p>
+                                <ion-item *ngIf="node.editing">
+                                    <ion-input [(ngModel)]="cell.value"></ion-input>
+                                    <ion-button slot="end" (click)="removeCell(node, rowIndex, colIndex)" color="danger">
+                                        <ion-icon name="trash"></ion-icon>
+                                    </ion-button>
+                                </ion-item>
+                            </ion-col>
+                            <ion-col size="xs" *ngIf="node.editing">
+                                <ion-button (click)="addCol(row)">
+                                    <ion-icon name="add"></ion-icon>
+                                </ion-button>
+                                <ion-button (click)="removeRow(node, rowIndex)" color="danger">
+                                    <ion-icon name="trash"></ion-icon>
+                                </ion-button>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row *ngIf="node.editing">
+                            <ion-col>
+                                <ion-button (click)="addRow(node)">
+                                    <ion-icon name="add"></ion-icon>
+                                </ion-button>
+                            </ion-col>
+                        </ion-row>
+                    </ion-grid>
+                </div>
+                <div *ngIf="node.editing">
+                    <ion-button (click)="stopEditing(paragraphKey, nodeKey)">
+                        <ion-icon name="checkmark"></ion-icon>
+                    </ion-button>
+                    <ion-button slot="end" (click)="removeNode(paragraphKey, nodeKey)" color="danger">
+                        <ion-icon name="trash"></ion-icon>
+                    </ion-button>
+                </div>
+            </div>
+            <ion-buttons *ngIf="editing">
+                <ion-fab-button size="small" (click)="addText(paragraph)">
+                    <ion-icon name="list"></ion-icon>
+                </ion-fab-button>
+                <ion-fab-button size="small" (click)="addGrid(paragraph)">
+                    <ion-icon name="grid"></ion-icon>
+                </ion-fab-button>
+                <ion-fab-button size="small" (click)="removeParagraph(paragraphKey)" color="danger">
+                    <ion-icon name="trash"></ion-icon>
+                </ion-fab-button>
+            </ion-buttons>
+        </div>
+    </div>
 </ion-content>
