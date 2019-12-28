@@ -16,10 +16,12 @@ import {AngularFireStorageModule} from '@angular/fire/storage';
 import {QuillModule} from 'ngx-quill';
 import {CreateSubwikiPage} from './create-subwiki/create-subwiki.page';
 import {CreateSubwikiPageModule} from './create-subwiki/create-subwiki.module';
+import {CreatePagePageModule} from './create-page/create-page.module';
+import {CreatePagePage} from './create-page/create-page.page';
 
 @NgModule({
     declarations: [AppComponent],
-    entryComponents: [CreateSubwikiPage],
+    entryComponents: [CreateSubwikiPage, CreatePagePage],
     imports: [
         BrowserModule,
         IonicModule.forRoot(),
@@ -33,7 +35,8 @@ import {CreateSubwikiPageModule} from './create-subwiki/create-subwiki.module';
                 syntax: true,
             }
         }),
-        CreateSubwikiPageModule
+        CreateSubwikiPageModule,
+        CreatePagePageModule
     ],
     providers: [
         StatusBar,

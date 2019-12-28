@@ -1,0 +1,10 @@
+.category:hover .categories {
+  display: block;
+  position: absolute;
+  background: white;
+  z-index: 999;
+  width: 75%;
+}
+.category:not(:hover) .categories {
+  display: none;
+}

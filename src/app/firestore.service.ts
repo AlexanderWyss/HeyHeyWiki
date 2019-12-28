@@ -73,8 +73,8 @@ export class FirestoreService {
         return this.pageCollection.add({paragraphs: [{title: name, nodes: [{type: 'text', value: 'Content...'}]}]});
     }
 
-    public getContent(id: string): Observable<DocumentSnapshot<SubWikiContent>> {
-        return this.contentCollection.doc(id).snapshotChanges().pipe(this.mapDoc());
+    public getContent(id: string): Promise<SubWikiContent> {
+        return this.contentCollection.ref.doc(id).get().then(this.mapDocGet());
     }
 
     private mapCollection<T extends DocumentChangeAction<any>, R>(): OperatorFunction<T[], R[]> {
@@ -136,5 +136,16 @@ export class FirestoreService {
         const pageRef = this.pageCollection.doc(page.id);
         delete page.id;
         pageRef.set(page).catch(err => console.error(err));
+    }
+
+    createPage(contentId: string, page: Page) {
+        return this.createPageContent(page.title).then(ref => {
+            page.pageContentRef = ref.id;
+            return this.getContent(contentId).then(content => {
+                delete content.id;
+                content.pages.push(page);
+                return this.contentCollection.doc(contentId).set(content);
+            });
+        });
     }
 }

@@ -1,0 +1,24 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>CreateSubwiki</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-item>
+        <ion-label position="floating">Name</ion-label>
+        <ion-input [(ngModel)]="name"></ion-input>
+    </ion-item>
+  <div class="category">
+    <ion-item>
+        <ion-label position="floating">Category</ion-label>
+        <ion-input [(ngModel)]="category"></ion-input>
+    </ion-item>
+    <ion-list class="categories">
+      <ion-item *ngFor="let categoryname of categories | keyvalue"
+                (click)="setCategory(categoryname.value)">{{categoryname.value}}</ion-item>
+    </ion-list>
+  </div>
+    <ion-button (click)="cancel()">Cancel</ion-button>
+    <ion-button (click)="create()">Create</ion-button>
+</ion-content>
