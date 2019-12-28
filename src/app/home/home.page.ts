@@ -4,6 +4,7 @@ import {MenuController, ModalController, NavController} from '@ionic/angular';
 import {SubWiki} from '../_models/sub-wiki';
 import {CreateSubwikiPage} from '../create-subwiki/create-subwiki.page';
 
+
 @Component({
     selector: 'app-home',
     templateUrl: 'home.page.html',
@@ -23,16 +24,15 @@ export class HomePage implements OnInit {
     }
 
     ngOnInit(): void {
-
+        this.firestore.getSubWikis().subscribe(async subwikis => {
+            this.subwikis = subwikis;
+            this.searchableSubwikis = this.subwikis;
+        });
     }
 
 
     ionViewWillEnter() {
         this.menuController.enable(false);
-        this.firestore.getSubWikis().subscribe(subwikis => {
-            this.subwikis = subwikis;
-            this.searchableSubwikis = this.subwikis;
-        });
     }
 
     onSubwikiSearchChange(event: any) {

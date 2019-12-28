@@ -8,7 +8,7 @@
       <div *ngFor="let subwiki of this.searchableSubwikis">
         <ion-card class="subwiki-card" (click)="openSubwiki(subwiki)">
           <ion-card-content>
-            <img src="{{ subwiki.imageRef }}" alt="SubWiki Preview Image">
+            <img [src]="subwiki.imageRef | resolveStorage: 'subwiki' | async" alt="SubWiki Preview Image">
           </ion-card-content>
           <ion-card-header>
             <ion-card-title>{{ subwiki.name }}</ion-card-title>

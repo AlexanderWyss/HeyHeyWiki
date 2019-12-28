@@ -14,6 +14,7 @@ import {SubWikiContent} from './_models/sub-wiki-content';
 import {ReemittingObserver} from './ReemittingObserver';
 import {PageContent} from './_models/pageContent';
 import {Page} from './_models/page';
+import {v4 as uuid} from 'uuid';
 
 @Injectable({
     providedIn: 'root'
@@ -32,8 +33,8 @@ export class FirestoreService {
         this.pageCollection = this.fireStore.collection('page');
     }
 
-    public resolveStorageRev(ref: string) {
-        return this.storage.ref(ref).getDownloadURL();
+    public resolveStorageRev(folder: string, ref: string): Observable<any> {
+        return this.storage.ref(folder).child(ref).getDownloadURL();
     }
 
     public getSubWikis(): ReemittingObserver<SubWiki[]> {
@@ -147,5 +148,9 @@ export class FirestoreService {
                 return this.contentCollection.doc(contentId).set(content);
             });
         });
+    }
+
+    uploadFile(folder: string, file: any) {
+        return this.storage.ref(folder + '/' + uuid()).put(file);
     }
 }

@@ -9,6 +9,12 @@
         <ion-label position="floating">Name</ion-label>
         <ion-input [(ngModel)]="name"></ion-input>
     </ion-item>
+    <ion-item>
+        <ion-label>Image</ion-label>
+        <input (change)="uploadFile($event)" type="file" accept="image/*"/>
+        <ion-spinner *ngIf="uploading"></ion-spinner>
+        <ion-icon *ngIf="!uploading && imageRef" name="checkmark" color="success"></ion-icon>
+    </ion-item>
     <ion-item lines="none">
         <ion-label *ngIf="error" color="danger">{{error}}</ion-label>
     </ion-item>

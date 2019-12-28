@@ -43,6 +43,8 @@ import {CreatePagePage} from './create-page/create-page.page';
         SplashScreen,
         {provide: RouteReuseStrategy, useClass: IonicRouteStrategy}
     ],
+    exports: [
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule {

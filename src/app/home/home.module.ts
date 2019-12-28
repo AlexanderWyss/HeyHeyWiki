@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 
 import { HomePage } from './home.page';
 import {HeaderModule} from '../header/header.module';
+import {PipeModule} from '../_pipes/pipe.module';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import {HeaderModule} from '../header/header.module';
                 component: HomePage
             }
         ]),
-        HeaderModule
+        HeaderModule,
+        PipeModule
     ],
   declarations: [HomePage]
 })
