@@ -35,11 +35,19 @@ export class SubwikiPage implements OnInit {
         });
     }
 
-    toggleEditing() {
-        this.editing = !this.editing;
-        if (!this.editing) {
-            this.stopEditingAll();
-        }
+    startPageEditing() {
+        this.editing = true;
+    }
+
+    endPageEditing() {
+        this.editing = false;
+        this.stopEditingAll();
+        this.stripNodeEditingAttribute();
+        this.firestore.updatePageContent(this.page);
+    }
+
+    stripNodeEditingAttribute() {
+        this.page.paragraphs.forEach(para => para.nodes.forEach(node => delete node.editing));
     }
 
     addParagraph() {

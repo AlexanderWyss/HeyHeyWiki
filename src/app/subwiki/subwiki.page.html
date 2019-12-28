@@ -5,9 +5,11 @@
     <ion-fab vertical="top" horizontal="end" slot="fixed">
         <ion-row>
             <ion-col>
-
-                <ion-fab-button size="small" (click)="toggleEditing()">
-                    <ion-icon [name]="editing ? 'checkmark' : 'create'"></ion-icon>
+                <ion-fab-button *ngIf="!editing" size="small" (click)="startPageEditing()">
+                    <ion-icon name="create"></ion-icon>
+                </ion-fab-button>
+                <ion-fab-button *ngIf="editing" size="small" (click)="endPageEditing()">
+                    <ion-icon name="checkmark"></ion-icon>
                 </ion-fab-button>
             </ion-col>
             <ion-col>

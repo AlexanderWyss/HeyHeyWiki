@@ -131,4 +131,10 @@ export class FirestoreService {
     private getPageContent(pageContentRef: string): Promise<PageContent> {
         return this.pageCollection.ref.doc(pageContentRef).get().then(this.mapDocGet());
     }
+
+    updatePageContent(page: PageContent) {
+        const pageRef = this.pageCollection.doc(page.id);
+        delete page.id;
+        pageRef.set(page).catch(err => console.error(err));
+    }
 }
