@@ -54,7 +54,7 @@ export class AppComponent {
                         } else {
                             this.appPages[page.category].pages.push(page);
                         }
-                    })).then(v  => console.log(this.appPages));
+                    }));
                 }
             }
         });

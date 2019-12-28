@@ -14,10 +14,12 @@ import {AngularFirestoreModule} from '@angular/fire/firestore';
 import {AngularFireAuthModule} from '@angular/fire/auth';
 import {AngularFireStorageModule} from '@angular/fire/storage';
 import {QuillModule} from 'ngx-quill';
+import {CreateSubwikiPage} from './create-subwiki/create-subwiki.page';
+import {CreateSubwikiPageModule} from './create-subwiki/create-subwiki.module';
 
 @NgModule({
     declarations: [AppComponent],
-    entryComponents: [],
+    entryComponents: [CreateSubwikiPage],
     imports: [
         BrowserModule,
         IonicModule.forRoot(),
@@ -30,7 +32,8 @@ import {QuillModule} from 'ngx-quill';
             modules: {
                 syntax: true,
             }
-        })
+        }),
+        CreateSubwikiPageModule
     ],
     providers: [
         StatusBar,

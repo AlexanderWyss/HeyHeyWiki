@@ -1,5 +1,5 @@
 <!--suppress TypeScriptValidateTypes -->
-<app-header [title]="subwiki?.name"></app-header>
+<app-header [title]="subwiki"></app-header>
 
 <ion-content>
     <ion-fab vertical="top" horizontal="end" slot="fixed">
@@ -18,7 +18,7 @@
         </ion-row>
     </ion-fab>
     <div>
-        <div *ngFor="let paragraph of page.paragraphs; let paragraphKey = index">
+        <div *ngFor="let paragraph of page?.paragraphs; let paragraphKey = index">
             <ion-item>
                 <h2 *ngIf="!editing">{{paragraph.title}}</h2>
                 <ion-input *ngIf="editing" [(ngModel)]="paragraph.title" placeholder="Title"></ion-input>

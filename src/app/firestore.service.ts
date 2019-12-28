@@ -12,6 +12,8 @@ import {map} from 'rxjs/operators';
 import {Observable, OperatorFunction} from 'rxjs';
 import {SubWikiContent} from './_models/sub-wiki-content';
 import {ReemittingObserver} from './ReemittingObserver';
+import {PageContent} from './_models/pageContent';
+import {Page} from './_models/page';
 
 @Injectable({
     providedIn: 'root'
@@ -20,12 +22,14 @@ export class FirestoreService {
     private readonly subwikiCollection: AngularFirestoreCollection<SubWiki>;
     private readonly contentCollection: AngularFirestoreCollection<SubWikiContent>;
     private subwikis: ReemittingObserver<SubWiki[]>;
+    private pageCollection: AngularFirestoreCollection<PageContent>;
 
 
     constructor(private fireStore: AngularFirestore, private storage: AngularFireStorage) {
         this.subwikiCollection = this.fireStore.collection('subwiki');
         this.subwikis = new ReemittingObserver(this.subwikiCollection.snapshotChanges().pipe(this.mapCollection()));
         this.contentCollection = this.fireStore.collection('content');
+        this.pageCollection = this.fireStore.collection('page');
     }
 
     public resolveStorageRev(ref: string) {
@@ -53,7 +57,20 @@ export class FirestoreService {
     }
 
     public createSubWiki(subwiki: SubWiki): Promise<DocumentReference> {
-        return this.subwikiCollection.add(subwiki);
+        return this.createContent(subwiki.name).then(ref => {
+            subwiki.contentRef = ref.id;
+            return this.subwikiCollection.add(subwiki);
+        });
+    }
+
+    private createContent(name: string) {
+        return this.createPageContent(name).then(ref => {
+            return this.contentCollection.add({pages: [{title: name, home: true, category: '', pageContentRef: ref.id}]});
+        });
+    }
+
+    private createPageContent(name: string) {
+        return this.pageCollection.add({paragraphs: [{title: name, nodes: [{type: 'text', value: 'Content...'}]}]});
     }
 
     public getContent(id: string): Observable<DocumentSnapshot<SubWikiContent>> {
@@ -94,5 +111,24 @@ export class FirestoreService {
             const data = doc.data();
             return {id, ...data} as unknown as R;
         };
+    }
+
+    getPageContentByName(subwiki: string, pageName: string | null): Promise<PageContent> {
+        return this.getContentByName(subwiki).then(content => {
+            const page = this.getPage(content, pageName);
+            return this.getPageContent(page.pageContentRef);
+        });
+    }
+
+    private getPage(content: SubWikiContent, pageName: string | null): Page {
+        let pageByName = [];
+        if (pageName && pageName.trim() !== '') {
+            pageByName = content.pages.filter(page => page.title === pageName);
+        }
+        return pageByName.length > 0 ? pageByName[0] : content.pages.filter(page => page.home)[0];
+    }
+
+    private getPageContent(pageContentRef: string): Promise<PageContent> {
+        return this.pageCollection.ref.doc(pageContentRef).get().then(this.mapDocGet());
     }
 }

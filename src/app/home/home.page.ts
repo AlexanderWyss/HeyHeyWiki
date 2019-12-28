@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {FirestoreService} from '../firestore.service';
-import {MenuController, NavController} from '@ionic/angular';
+import {MenuController, ModalController, NavController} from '@ionic/angular';
 import {SubWiki} from '../_models/sub-wiki';
+import {CreateSubwikiPage} from '../create-subwiki/create-subwiki.page';
 
 @Component({
     selector: 'app-home',
@@ -16,7 +17,8 @@ export class HomePage implements OnInit {
     constructor(
         private firestore: FirestoreService,
         private menuController: MenuController,
-        private navController: NavController
+        private navController: NavController,
+        private modalController: ModalController
     ) {
     }
 
@@ -46,5 +48,18 @@ export class HomePage implements OnInit {
 
     openSubwiki(subwiki: SubWiki) {
         this.navController.navigateForward(['subwiki', subwiki.name]);
+    }
+
+    createSubwiki() {
+        this.modalController.create({
+            component: CreateSubwikiPage
+        }).then(modal => {
+            modal.onDidDismiss().then(result => {
+                if (result.data) {
+                    this.openSubwiki(result.data.subwiki);
+                }
+            });
+            modal.present();
+        });
     }
 }

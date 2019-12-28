@@ -1,30 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {SubWiki} from '../_models/sub-wiki';
 import {AlertController, MenuController} from '@ionic/angular';
-
-interface PageContent {
-    title: string;
-    paragraphs: Paragraph[];
-}
-
-interface Paragraph {
-    title: string;
-    nodes: Node[];
-}
-
-interface Node {
-    value: string | Row[];
-    type: string;
-    editing?: boolean;
-}
-
-interface Row {
-    cells: Cell[];
-}
-
-interface Cell {
-    value: string;
-}
+import {Row} from '../_models/row';
+import {EditableNode, Node} from '../_models/node';
+import {Paragraph} from '../_models/paragraph';
+import {PageContent} from '../_models/pageContent';
+import {ActivatedRoute} from '@angular/router';
+import {FirestoreService} from '../firestore.service';
+import {SubWikiContent} from '../_models/sub-wiki-content';
 
 @Component({
     selector: 'app-subwiki',
@@ -32,49 +15,24 @@ interface Cell {
     styleUrls: ['./subwiki.page.scss'],
 })
 export class SubwikiPage implements OnInit {
-    subwiki: SubWiki;
+    subwiki: string;
     editing: boolean;
     page: PageContent;
 
-    constructor(private menuController: MenuController, private alertController: AlertController) {
+    constructor(private menuController: MenuController, private alertController: AlertController, private route: ActivatedRoute, private firestore: FirestoreService) {
     }
 
     ngOnInit() {
-        this.page = {
-            title: 'Döme',
-            paragraphs: [
-                {
-                    title: 'Paragraph 1',
-                    nodes: [
-                        {
-                            value: 'Existence is Pain',
-                            type: 'text'
-                        },
-                        {
-                            value: 'yepjsdfl',
-                            type: 'text'
-                        }
-                    ]
-                },
-                {
-                    title: 'Paragraph 2',
-                    nodes: [
-                        {
-                            value: 'Existence is Painfull bastard',
-                            type: 'text'
-                        },
-                        {
-                            value: [{cells: [{value: 'yepjsdfladfs'}, {value: 'bla'}]}, {cells: [{value: 'yep'}]}],
-                            type: 'grid'
-                        }
-                    ]
-                }
-            ]
-        };
     }
 
     ionViewWillEnter() {
         this.menuController.enable(true);
+        this.route.paramMap.subscribe(params => {
+           this.subwiki = params.get('name');
+           this.firestore.getPageContentByName(this.subwiki, params.get('page')).then(content => {
+               this.page = content;
+           });
+        });
     }
 
     toggleEditing() {
@@ -113,7 +71,7 @@ export class SubwikiPage implements OnInit {
         });
     }
 
-    startEditing(node: Node) {
+    startEditing(node: EditableNode) {
         if (this.editing && !node.editing) {
             this.stopEditingAll();
             node.editing = true;
@@ -122,7 +80,7 @@ export class SubwikiPage implements OnInit {
 
     stopEditing(paragraphKey: number, nodeKey: number) {
         const paragraph = this.page.paragraphs[paragraphKey];
-        const node = paragraph.nodes[nodeKey];
+        const node = paragraph.nodes[nodeKey] as EditableNode;
         node.editing = false;
         if (this.isEmpty(node)) {
             this.removeNode(paragraphKey, nodeKey);
