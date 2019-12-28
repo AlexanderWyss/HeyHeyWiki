@@ -14,6 +14,7 @@ export class CreatePagePage implements OnInit {
     name: string;
     category: string;
     categories = [];
+    error: string;
 
     constructor(private modalController: ModalController, private firestore: FirestoreService) {
     }
@@ -32,6 +33,11 @@ export class CreatePagePage implements OnInit {
     }
 
     create() {
+      if (!this.name || this.name.trim() === '') {
+        this.error = 'Name is required';
+      } else {
+        this.error = undefined;
+      }
       const page = {title: this.name, category: this.category, home: false};
       this.firestore.createPage(this.content.id, page).then(res => this.modalController.dismiss({page}));
     }

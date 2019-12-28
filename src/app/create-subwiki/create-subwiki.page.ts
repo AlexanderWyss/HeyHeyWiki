@@ -9,6 +9,7 @@ import {FirestoreService} from '../firestore.service';
 })
 export class CreateSubwikiPage implements OnInit {
     name: string;
+    error: string;
 
     constructor(private firestore: FirestoreService, private modalController: ModalController) {
     }
@@ -21,6 +22,11 @@ export class CreateSubwikiPage implements OnInit {
     }
 
     create() {
+        if (!this.name || this.name.trim() === '') {
+            this.error = 'Name is required.';
+        } else {
+            this.error = null;
+        }
         const subwiki = {name: this.name, imageRef: null};
         this.firestore.createSubWiki(subwiki).then(ref => {
             this.modalController.dismiss({subwiki, ref: ref.id});

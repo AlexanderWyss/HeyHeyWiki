@@ -9,6 +9,9 @@
         <ion-label position="floating">Name</ion-label>
         <ion-input [(ngModel)]="name"></ion-input>
     </ion-item>
+    <ion-item lines="none">
+        <ion-label *ngIf="error" color="danger">{{error}}</ion-label>
+    </ion-item>
     <ion-button (click)="cancel()">Cancel</ion-button>
     <ion-button (click)="create()">Create</ion-button>
 </ion-content>
