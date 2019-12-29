@@ -46,25 +46,32 @@ export class AppComponent {
             if (route instanceof ResolveEnd && route.urlAfterRedirects.startsWith('/subwiki/')) {
                 const params = route.state.root.firstChild.paramMap;
                 if (params.has('name')) {
-                    this.name = params.get('name');
-                    this.appPages = [];
-                    this.firestore.getContentByName(this.name).then(content => {
-                        this.content = content;
-                        content.pages.forEach(page => {
-                            if (this.appPages[page.category] === undefined) {
-                                this.appPages[page.category] = {
-                                    name: page.category,
-                                    expanded: false,
-                                    pages: [page]
-                                };
-                            } else {
-                                this.appPages[page.category].pages.push(page);
-                            }
+                    const name = params.get('name');
+                    if (name !== this.name) {
+                        this.name = name;
+                        this.appPages = [];
+                        this.firestore.getContentByName(this.name).then(content => {
+                            this.content = content;
+                            content.pages.forEach(page => {
+                                this.addCategory(page);
+                            });
                         });
-                    });
+                    }
                 }
             }
         });
+    }
+
+    private addCategory(page) {
+        if (this.appPages[page.category] === undefined) {
+            this.appPages[page.category] = {
+                name: page.category,
+                expanded: false,
+                pages: [page]
+            };
+        } else {
+            this.appPages[page.category].pages.push(page);
+        }
     }
 
     toggle(category: Category) {
@@ -82,7 +89,10 @@ export class AppComponent {
                 content: this.content
             }
         }).then(modal => {
-            modal.onDidDismiss().then(result => this.navigate(result.data.page));
+            modal.onDidDismiss().then(result => {
+                this.addCategory(result.data.page);
+                this.navigate(result.data.page);
+            });
             modal.present();
         });
     }

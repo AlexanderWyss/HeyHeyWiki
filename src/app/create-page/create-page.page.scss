@@ -4,6 +4,9 @@
   background: white;
   z-index: 999;
   width: 75%;
+  margin-left: 1rem;
+  border: thin solid black;
+  border-top: 0px;
 }
 .category:not(:hover) .categories {
   display: none;
