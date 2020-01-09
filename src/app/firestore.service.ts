@@ -134,9 +134,10 @@ export class FirestoreService {
     }
 
     updatePageContent(page: PageContent) {
-        const pageRef = this.pageCollection.doc(page.id);
-        delete page.id;
-        pageRef.set(page).catch(err => console.error(err));
+        const clone = {...page};
+        const pageRef = this.pageCollection.doc(clone.id);
+        delete clone.id;
+        pageRef.set(clone).catch(err => console.error(err));
     }
 
     createPage(contentId: string, page: Page) {
