@@ -18,6 +18,7 @@ import {CreateSubwikiPage} from './create-subwiki/create-subwiki.page';
 import {CreateSubwikiPageModule} from './create-subwiki/create-subwiki.module';
 import {CreatePagePageModule} from './create-page/create-page.module';
 import {CreatePagePage} from './create-page/create-page.page';
+import {AngularFireFunctionsModule, FUNCTIONS_REGION} from '@angular/fire/functions';
 
 @NgModule({
     declarations: [AppComponent],
@@ -30,6 +31,7 @@ import {CreatePagePage} from './create-page/create-page.page';
         AngularFirestoreModule,
         AngularFireAuthModule,
         AngularFireStorageModule,
+        AngularFireFunctionsModule,
         QuillModule.forRoot(),
         CreateSubwikiPageModule,
         CreatePagePageModule
@@ -37,7 +39,8 @@ import {CreatePagePage} from './create-page/create-page.page';
     providers: [
         StatusBar,
         SplashScreen,
-        {provide: RouteReuseStrategy, useClass: IonicRouteStrategy}
+        {provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
+        { provide: FUNCTIONS_REGION, useValue: 'europe-west2' }
     ],
     exports: [
     ],

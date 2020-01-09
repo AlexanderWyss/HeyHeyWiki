@@ -10,8 +10,10 @@ import {NavController} from '@ionic/angular';
 export class HeaderComponent implements OnInit {
 
     @Input() title: string;
+    @Input() searchBar: boolean;
 
     user: string;
+    query: string;
 
     constructor(private authService: AuthService,
                 private navController: NavController) {
@@ -41,5 +43,11 @@ export class HeaderComponent implements OnInit {
 
     home() {
         this.navController.navigateForward('home');
+    }
+
+    search() {
+        if (this.query !== undefined && this.query.trim() !== '') {
+            this.navController.navigateForward(['subwiki', this.title, 'search', this.query]);
+        }
     }
 }

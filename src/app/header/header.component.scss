@@ -4,9 +4,17 @@
     margin-left: 10px;
     cursor: pointer;
   }
+
+  .searchbar {
+    text-align: left;
+    width: 20rem;
+
+  }
+
   .buttons {
     margin: 0;
     height: 56px;
+
     ion-button {
       height: 100%;
       margin: 0;

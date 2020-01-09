@@ -7,6 +7,8 @@
         <ion-title>
             {{title}}
         </ion-title>
+        <ion-searchbar *ngIf="searchBar" class="searchbar" slot="end" placeholder="Search Subwiki" inputmode="text" type="text"
+            [(ngModel)]="query" (keyup.enter)="search()"></ion-searchbar>
         <ion-buttons slot="end" class="buttons" *ngIf="!this.user">
             <ion-button (click)="signUp()">
                 Sign up

@@ -28,9 +28,14 @@ const routes: Routes = [
     loadChildren: () => import('./subwiki/subwiki.module').then( m => m.SubwikiPageModule)
   },
   {
+    path: 'subwiki/:name/search/:query',
+    loadChildren: () => import('./search/search.module').then( m => m.SearchPageModule)
+  },
+  {
     path: 'subwiki/:name/:page',
     loadChildren: () => import('./subwiki/subwiki.module').then( m => m.SubwikiPageModule)
   },
+
 ];
 
 @NgModule({
