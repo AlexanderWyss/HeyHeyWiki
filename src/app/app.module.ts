@@ -30,11 +30,7 @@ import {CreatePagePage} from './create-page/create-page.page';
         AngularFirestoreModule,
         AngularFireAuthModule,
         AngularFireStorageModule,
-        QuillModule.forRoot({
-            modules: {
-                syntax: true,
-            }
-        }),
+        QuillModule.forRoot(),
         CreateSubwikiPageModule,
         CreatePagePageModule
     ],
