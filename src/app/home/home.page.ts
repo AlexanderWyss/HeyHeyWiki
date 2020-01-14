@@ -3,6 +3,7 @@ import {FirestoreService} from '../firestore.service';
 import {MenuController, ModalController, NavController} from '@ionic/angular';
 import {SubWiki} from '../_models/sub-wiki';
 import {CreateSubwikiPage} from '../create-subwiki/create-subwiki.page';
+import { AuthService } from '../auth.service';
 
 
 @Component({
@@ -15,11 +16,14 @@ export class HomePage implements OnInit {
     private subwikis: SubWiki[];
     public searchableSubwikis: SubWiki[];
 
+    public isAuthenticated = false;
+
     constructor(
         private firestore: FirestoreService,
         private menuController: MenuController,
         private navController: NavController,
-        private modalController: ModalController
+        private modalController: ModalController,
+        private auth: AuthService,
     ) {
     }
 
@@ -33,6 +37,11 @@ export class HomePage implements OnInit {
 
     ionViewWillEnter() {
         this.menuController.enable(false);
+        this.auth.getUser().subscribe(user => {
+            if (user) {
+                this.isAuthenticated = true;
+            }
+        });
     }
 
     onSubwikiSearchChange(event: any) {

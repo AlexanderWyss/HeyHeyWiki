@@ -5,7 +5,7 @@
     <ion-fab vertical="top" horizontal="end" slot="fixed">
         <ion-row>
             <ion-col>
-                <ion-fab-button *ngIf="!editing" size="small" (click)="startPageEditing()">
+                <ion-fab-button *ngIf="!editing && isAuthenticated" size="small" (click)="startPageEditing()">
                     <ion-icon name="create"></ion-icon>
                 </ion-fab-button>
                 <ion-fab-button *ngIf="editing" size="small" (click)="endPageEditing()">

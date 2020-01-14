@@ -1,13 +1,14 @@
-import {Component, OnInit} from '@angular/core';
-import {SubWiki} from '../_models/sub-wiki';
-import {AlertController, MenuController} from '@ionic/angular';
-import {Row} from '../_models/row';
-import {EditableNode, Node} from '../_models/node';
-import {Paragraph} from '../_models/paragraph';
-import {PageContent} from '../_models/pageContent';
-import {ActivatedRoute} from '@angular/router';
-import {FirestoreService} from '../firestore.service';
-import {SubWikiContent} from '../_models/sub-wiki-content';
+import { Component, OnInit } from '@angular/core';
+import { SubWiki } from '../_models/sub-wiki';
+import { AlertController, MenuController } from '@ionic/angular';
+import { Row } from '../_models/row';
+import { EditableNode, Node } from '../_models/node';
+import { Paragraph } from '../_models/paragraph';
+import { PageContent } from '../_models/pageContent';
+import { ActivatedRoute } from '@angular/router';
+import { FirestoreService } from '../firestore.service';
+import { SubWikiContent } from '../_models/sub-wiki-content';
+import { AuthService } from '../auth.service';
 
 @Component({
     selector: 'app-subwiki',
@@ -19,8 +20,15 @@ export class SubwikiPage implements OnInit {
     editing: boolean;
     page: PageContent;
 
-    constructor(private menuController: MenuController, private alertController: AlertController, private route: ActivatedRoute, private firestore: FirestoreService) {
-    }
+    isAuthenticated = false;
+
+    constructor(
+        private menuController: MenuController,
+        private alertController: AlertController,
+        private route: ActivatedRoute,
+        private firestore: FirestoreService,
+        private auth: AuthService,
+    ) { }
 
     ngOnInit() {
     }
@@ -28,10 +36,15 @@ export class SubwikiPage implements OnInit {
     ionViewWillEnter() {
         this.menuController.enable(true);
         this.route.paramMap.subscribe(params => {
-           this.subwiki = params.get('name');
-           this.firestore.getPageContentByName(this.subwiki, params.get('page')).then(content => {
-               this.page = content;
-           });
+            this.subwiki = params.get('name');
+            this.firestore.getPageContentByName(this.subwiki, params.get('page')).then(content => {
+                this.page = content;
+            });
+        });
+        this.auth.getUser().subscribe(user => {
+            if (user) {
+                this.isAuthenticated = true;
+            }
         });
     }
 
@@ -75,7 +88,7 @@ export class SubwikiPage implements OnInit {
         paragraph.nodes.push({
             type: 'grid',
             editing: true,
-            value: [{cells: [{value: ''}]}]
+            value: [{ cells: [{ value: '' }] }]
         });
     }
 
@@ -138,11 +151,11 @@ export class SubwikiPage implements OnInit {
     }
 
     addCol(row: Row) {
-        row.cells.push({value: ''});
+        row.cells.push({ value: '' });
     }
 
     addRow(node: Node) {
-        (node.value as Row[]).push({cells: [{value: ''}]});
+        (node.value as Row[]).push({ cells: [{ value: '' }] });
     }
 
     asRowArray(value: string | Row[]): Row[] {
