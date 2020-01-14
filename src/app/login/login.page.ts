@@ -36,7 +36,10 @@ export class LoginPage implements OnInit {
             this.validation = '';
             this.presentLoading();
             this.auth.login(this.email, this.password).then(() => this.dismissLoading())
-                .catch(() => this.validation = 'Email oder Passwort falsch.');
+                .catch(() => {
+                    this.validation = 'Email oder Passwort falsch.';
+                    this.dismissLoading();
+                });
         } else {
             this.validation = 'Bitte füllen Sie alle Felder aus.';
         }

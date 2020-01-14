@@ -13,15 +13,15 @@
           <ion-col>
             <ion-item>
               <ion-label position="floating">Email</ion-label>
-              <ion-input type="email" [(ngModel)]="email"></ion-input>
+              <ion-input type="email" id="email" [(ngModel)]="email" (keydown.enter)="jumpToNext(1)"></ion-input>
             </ion-item>
             <ion-item>
               <ion-label position="floating">Passwort</ion-label>
-              <ion-input type="password" [(ngModel)]="password"></ion-input>
+              <ion-input type="password" id="password" [(ngModel)]="password" (keydown.enter)="jumpToNext(2)"></ion-input>
             </ion-item>
             <ion-item>
               <ion-label position="floating">Passwort wiederholen</ion-label>
-              <ion-input type="password" [(ngModel)]="repeatePassword"></ion-input>
+              <ion-input type="password" id="repeatPassword" [(ngModel)]="repeatPassword" (keydown.enter)="jumpToNext(0)"></ion-input>
             </ion-item>
           </ion-col>
         </ion-row>
