@@ -24,6 +24,7 @@ export class AppComponent implements OnInit {
     public appPages: Category[] = [];
     public name: string;
     private content: PageInfo[];
+    private unsubscribe: Promise<firebase.Unsubscribe>;
 
     public isAuthenticated = false;
 
@@ -53,8 +54,12 @@ export class AppComponent implements OnInit {
                     if (name !== this.name) {
                         this.name = name;
                         this.appPages = [];
-                        this.firestore.getPageInfosOfSubwikiByName(this.name).then(pageInfos => {
+                        if (this.unsubscribe) {
+                            this.unsubscribe.then(unsub => unsub());
+                        }
+                        this.unsubscribe = this.firestore.listenPageInfosOfSubwikiByName(this.name, pageInfos => {
                             this.content = pageInfos;
+                            this.appPages = [];
                             pageInfos.forEach(page => {
                                 this.addCategory(page);
                             });

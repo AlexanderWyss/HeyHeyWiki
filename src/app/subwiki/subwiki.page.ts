@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {AlertController, MenuController} from '@ionic/angular';
+import {AlertController, MenuController, NavController} from '@ionic/angular';
 import {Row} from '../_models/row';
 import {EditableNode, Node} from '../_models/node';
 import {Paragraph} from '../_models/paragraph';
@@ -28,6 +28,7 @@ export class SubwikiPage implements OnInit {
         private route: ActivatedRoute,
         private firestore: FirestoreService,
         private auth: AuthService,
+        private navController: NavController,
     ) {
     }
 
@@ -196,6 +197,7 @@ export class SubwikiPage implements OnInit {
                     text: 'Delete',
                     handler: () => {
                         this.firestore.deletePage(this.pageInfo);
+                        this.navController.navigateForward(['subwiki', this.subwiki]);
                     }
                 }
             ]
