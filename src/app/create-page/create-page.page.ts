@@ -1,7 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ModalController} from '@ionic/angular';
 import {FirestoreService} from '../firestore.service';
-import {SubWikiContent} from '../_models/sub-wiki-content';
+import {PageInfo} from '../_models/pageInfo';
+import {SubWiki} from '../_models/sub-wiki';
 
 @Component({
     selector: 'app-create-page',
@@ -10,7 +11,8 @@ import {SubWikiContent} from '../_models/sub-wiki-content';
 })
 export class CreatePagePage implements OnInit {
 
-    @Input() content: SubWikiContent;
+    @Input() subwikiName: string;
+    subwiki: SubWiki;
     name: string;
     category: string;
     categories = [];
@@ -20,12 +22,16 @@ export class CreatePagePage implements OnInit {
     }
 
     ngOnInit() {
-        this.content.pages.forEach(page => {
-            if (page.category.trim() !== '') {
-                this.categories[page.category] = page.category;
-            }
+        this.firestore.getSubWikiByName(this.subwikiName).then(subwiki => {
+            this.subwiki = subwiki;
+            this.firestore.getPageInfosOfSubwikiById(this.subwiki.id).then(pageInfos => {
+                pageInfos.forEach(page => {
+                    if (page.category.trim() !== '') {
+                        this.categories[page.category] = page.category;
+                    }
+                });
+            });
         });
-        console.log(this.categories);
     }
 
     cancel() {
@@ -33,13 +39,13 @@ export class CreatePagePage implements OnInit {
     }
 
     create() {
-      if (!this.name || this.name.trim() === '') {
-        this.error = 'Name is required';
-      } else {
-        this.error = undefined;
-      }
-      const page = {title: this.name, category: this.category, home: false};
-      this.firestore.createPage(this.content.id, page).then(res => this.modalController.dismiss({page}));
+        if (!this.name || this.name.trim() === '') {
+            this.error = 'Name is required';
+        } else {
+            this.error = undefined;
+        }
+        this.firestore.createPage(this.name, this.category ? this.category : '', this.subwiki.id)
+            .then(ref => this.firestore.fromRef(ref).then(page => this.modalController.dismiss({page})));
     }
 
     setCategory(category: string) {

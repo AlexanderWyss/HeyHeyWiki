@@ -5,6 +5,6 @@ export interface Node {
     type: string;
 }
 
-export interface EditableNode extends Node{
+export interface EditableNode extends Node {
     editing?: boolean;
 }

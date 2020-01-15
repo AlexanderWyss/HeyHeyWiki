@@ -12,9 +12,14 @@
                     <ion-icon name="checkmark"></ion-icon>
                 </ion-fab-button>
             </ion-col>
-            <ion-col>
-                <ion-fab-button size="small" *ngIf="editing" (click)="addParagraph()">
+            <ion-col *ngIf="editing">
+                <ion-fab-button size="small" (click)="addParagraph()">
                     <ion-icon name="add"></ion-icon>
+                </ion-fab-button>
+            </ion-col>
+            <ion-col *ngIf="editing && !pageInfo.home">
+                <ion-fab-button *ngIf="editing" size="small"  color="danger" (click)="deletePage()">
+                    <ion-icon name="trash"></ion-icon>
                 </ion-fab-button>
             </ion-col>
         </ion-row>

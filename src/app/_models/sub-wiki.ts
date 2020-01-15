@@ -3,5 +3,4 @@ export interface SubWiki {
     name: string;
     imageRef: string;
     imageUrl?: string;
-    contentRef?: string;
 }

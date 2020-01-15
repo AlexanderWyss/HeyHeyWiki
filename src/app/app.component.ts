@@ -5,14 +5,13 @@ import {SplashScreen} from '@ionic-native/splash-screen/ngx';
 import {StatusBar} from '@ionic-native/status-bar/ngx';
 import {FirestoreService} from './firestore.service';
 import {ResolveEnd, Router} from '@angular/router';
-import {Page} from './_models/page';
+import {PageInfo} from './_models/pageInfo';
 import {CreatePagePage} from './create-page/create-page.page';
-import {SubWikiContent} from './_models/sub-wiki-content';
 
 interface Category {
     name: string;
     expanded: boolean;
-    pages: Page[];
+    pages: PageInfo[];
 }
 
 @Component({
@@ -23,7 +22,7 @@ interface Category {
 export class AppComponent {
     public appPages: Category[] = [];
     public name: string;
-    private content: SubWikiContent;
+    private content: PageInfo[];
 
     constructor(
         private platform: Platform,
@@ -50,9 +49,9 @@ export class AppComponent {
                     if (name !== this.name) {
                         this.name = name;
                         this.appPages = [];
-                        this.firestore.getContentByName(this.name).then(content => {
-                            this.content = content;
-                            content.pages.forEach(page => {
+                        this.firestore.getPageInfosOfSubwikiByName(this.name).then(pageInfos => {
+                            this.content = pageInfos;
+                            pageInfos.forEach(page => {
                                 this.addCategory(page);
                             });
                         });
@@ -78,7 +77,7 @@ export class AppComponent {
         category.expanded = !category.expanded;
     }
 
-    navigate(page: Page) {
+    navigate(page: PageInfo) {
         return this.navController.navigateForward(['subwiki', this.name, page.title]);
     }
 
@@ -86,7 +85,7 @@ export class AppComponent {
         this.modalController.create({
             component: CreatePagePage,
             componentProps: {
-                content: this.content
+                subwikiName: this.name
             }
         }).then(modal => {
             modal.onDidDismiss().then(result => {

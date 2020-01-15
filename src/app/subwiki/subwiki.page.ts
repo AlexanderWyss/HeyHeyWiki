@@ -1,14 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { SubWiki } from '../_models/sub-wiki';
-import { AlertController, MenuController } from '@ionic/angular';
-import { Row } from '../_models/row';
-import { EditableNode, Node } from '../_models/node';
-import { Paragraph } from '../_models/paragraph';
-import { PageContent } from '../_models/pageContent';
-import { ActivatedRoute } from '@angular/router';
-import { FirestoreService } from '../firestore.service';
-import { SubWikiContent } from '../_models/sub-wiki-content';
-import { AuthService } from '../auth.service';
+import {Component, OnInit} from '@angular/core';
+import {AlertController, MenuController} from '@ionic/angular';
+import {Row} from '../_models/row';
+import {EditableNode, Node} from '../_models/node';
+import {Paragraph} from '../_models/paragraph';
+import {ActivatedRoute} from '@angular/router';
+import {FirestoreService} from '../firestore.service';
+import {AuthService} from '../auth.service';
+import {PageInfo} from '../_models/pageInfo';
+import {Page} from '../_models/page';
 
 @Component({
     selector: 'app-subwiki',
@@ -18,7 +17,8 @@ import { AuthService } from '../auth.service';
 export class SubwikiPage implements OnInit {
     subwiki: string;
     editing: boolean;
-    page: PageContent;
+    page: Page;
+    pageInfo: PageInfo;
 
     isAuthenticated = false;
 
@@ -28,7 +28,8 @@ export class SubwikiPage implements OnInit {
         private route: ActivatedRoute,
         private firestore: FirestoreService,
         private auth: AuthService,
-    ) { }
+    ) {
+    }
 
     ngOnInit() {
     }
@@ -37,15 +38,22 @@ export class SubwikiPage implements OnInit {
         this.menuController.enable(true);
         this.route.paramMap.subscribe(params => {
             this.subwiki = params.get('name');
-            this.firestore.getPageContentByName(this.subwiki, params.get('page')).then(content => {
-                this.page = content;
-            });
+            if (params.has('page')) {
+                this.firestore.getPageInfoByName(this.subwiki, params.get('page')).then(pageInfo => this.setPage(pageInfo));
+            } else {
+                this.firestore.getHomePageInfo(this.subwiki).then(pageInfo => this.setPage(pageInfo));
+            }
         });
         this.auth.getUser().subscribe(user => {
             if (user) {
                 this.isAuthenticated = true;
             }
         });
+    }
+
+    private setPage(pageInfo: PageInfo) {
+        this.pageInfo = pageInfo;
+        this.firestore.getPage(this.pageInfo.pageRef).then(page => this.page = page);
     }
 
     startPageEditing() {
@@ -56,7 +64,7 @@ export class SubwikiPage implements OnInit {
         this.editing = false;
         this.stopEditingAll();
         this.stripNodeEditingAttribute();
-        this.firestore.updatePageContent(this.page);
+        this.firestore.updatePage(this.page);
     }
 
     stripNodeEditingAttribute() {
@@ -88,7 +96,7 @@ export class SubwikiPage implements OnInit {
         paragraph.nodes.push({
             type: 'grid',
             editing: true,
-            value: [{ cells: [{ value: '' }] }]
+            value: [{cells: [{value: ''}]}]
         });
     }
 
@@ -151,11 +159,11 @@ export class SubwikiPage implements OnInit {
     }
 
     addCol(row: Row) {
-        row.cells.push({ value: '' });
+        row.cells.push({value: ''});
     }
 
     addRow(node: Node) {
-        (node.value as Row[]).push({ cells: [{ value: '' }] });
+        (node.value as Row[]).push({cells: [{value: ''}]});
     }
 
     asRowArray(value: string | Row[]): Row[] {
@@ -171,5 +179,24 @@ export class SubwikiPage implements OnInit {
 
     removeRow(node: Node, rowIndex: number) {
         (node.value as Row[]).splice(rowIndex, 1);
+    }
+
+    deletePage() {
+        this.alertController.create({
+            header: 'Delete Page?',
+            buttons: [
+                {
+                    text: 'Cancel',
+                    role: 'cancel',
+                    cssClass: 'secondary'
+                },
+                {
+                    text: 'Delete',
+                    handler: () => {
+                        this.firestore.deletePage(this.pageInfo);
+                    }
+                }
+            ]
+        }).then(alert => alert.present());
     }
 }

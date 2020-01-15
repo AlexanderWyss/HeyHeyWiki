@@ -1,8 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ModalController} from '@ionic/angular';
 import {FirestoreService} from '../firestore.service';
-import Reference = firebase.database.Reference;
-import UploadTaskSnapshot = firebase.storage.UploadTaskSnapshot;
 
 @Component({
     selector: 'app-create-subwiki',
