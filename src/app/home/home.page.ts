@@ -47,9 +47,8 @@ export class HomePage implements OnInit {
         });
     }
 
-    displayImage() {
-        console.log('setting to true');
-        this.imageLoaded = true;
+    displayImage(subwiki: SubWiki) {
+        this.subwikis.find(i => i.id === subwiki.id).imageHasLoaded = true;
     }
 
     onSubwikiSearchChange(event: any) {

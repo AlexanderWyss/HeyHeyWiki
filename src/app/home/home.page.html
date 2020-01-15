@@ -7,15 +7,15 @@
     <div class="subwiki-flex-container">
       <div *ngFor="let subwiki of this.searchableSubwikis">
         <ion-card class="subwiki-card" (click)="openSubwiki(subwiki)">
-          <ion-card-content *ngIf="!imageLoaded" class="spinner-container">
+          <ion-card-content *ngIf="!subwiki.imageHasLoaded" class="spinner-container">
             <div>
                 <ion-spinner name="dots"></ion-spinner>
             </div>
           </ion-card-content>
-          <ion-card-content [ngClass]="{'invisible': !imageLoaded}">
-            <img [src]="subwiki.imageRef | resolveStorage: 'subwiki' | async" alt="SubWiki Preview Image" (load)="displayImage()">
+          <ion-card-content [ngClass]="{'invisible': !subwiki.imageHasLoaded}">
+            <img [src]="subwiki.imageRef | resolveStorage: 'subwiki' | async" alt="SubWiki Preview Image" (load)="displayImage(subwiki)">
           </ion-card-content>
-          <ion-card-header [ngClass]="{'invisible': !imageLoaded}">
+          <ion-card-header [ngClass]="{'invisible': !subwiki.imageHasLoaded}">
             <ion-card-title>{{ subwiki.name }}</ion-card-title>
           </ion-card-header>
         </ion-card>
