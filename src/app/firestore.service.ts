@@ -79,8 +79,10 @@ export class FirestoreService {
         return this.pageInfoCollection.ref.where('subwikiRef', '==', id).get().then(this.mapGet());
     }
 
-    getPageInfosOfSubwikiByName(subwikiName: string): Promise<PageInfo[]> {
-        return this.getSubWikiByName(subwikiName).then(subwiki => this.getPageInfosOfSubwikiById(subwiki.id));
+    listenPageInfosOfSubwikiByName(subwikiName: string, callbackfn: (value: PageInfo[]) => void): void {
+        this.getSubWikiByName(subwikiName).then(subwiki => this.pageInfoCollection.ref
+            .where('subwikiRef', '==', subwiki.id)
+            .onSnapshot(snapshot => callbackfn(snapshot.docs.map(this.mapDocGet()))));
     }
 
     getHomePageInfo(subwikiName: string) {
@@ -114,8 +116,9 @@ export class FirestoreService {
         pageRef.set(clone).catch(err => console.error(err));
     }
 
-    deletePage(page: PageInfo) {
-
+    deletePage(pageInfo: PageInfo) {
+        this.pageInfoCollection.doc(pageInfo.id).delete();
+        this.pageCollection.doc(pageInfo.pageRef).delete();
     }
 
     private mapCollection<T extends DocumentChangeAction<any>, R>(): OperatorFunction<T[], R[]> {

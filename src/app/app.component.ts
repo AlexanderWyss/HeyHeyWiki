@@ -49,8 +49,9 @@ export class AppComponent {
                     if (name !== this.name) {
                         this.name = name;
                         this.appPages = [];
-                        this.firestore.getPageInfosOfSubwikiByName(this.name).then(pageInfos => {
+                        this.firestore.listenPageInfosOfSubwikiByName(this.name, pageInfos => {
                             this.content = pageInfos;
+                            this.appPages = [];
                             pageInfos.forEach(page => {
                                 this.addCategory(page);
                             });
