@@ -17,6 +17,7 @@ export class HomePage implements OnInit {
     public searchableSubwikis: SubWiki[];
 
     public isAuthenticated = false;
+    public imageLoaded = false;
 
     constructor(
         private firestore: FirestoreService,
@@ -44,6 +45,11 @@ export class HomePage implements OnInit {
                 this.isAuthenticated = false;
             }
         });
+    }
+
+    displayImage() {
+        console.log('setting to true');
+        this.imageLoaded = true;
     }
 
     onSubwikiSearchChange(event: any) {
