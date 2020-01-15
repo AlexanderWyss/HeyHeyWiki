@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {ModalController} from '@ionic/angular';
+import {AlertController, ModalController, NavController} from '@ionic/angular';
 import {FirestoreService} from '../firestore.service';
 import {SubWiki} from '../_models/sub-wiki';
 
@@ -16,7 +16,10 @@ export class EditSubwikiPage implements OnInit {
     imageRef: firebase.storage.Reference;
     uploading: boolean;
 
-    constructor(private firestore: FirestoreService, private modalController: ModalController) {
+    constructor(private firestore: FirestoreService,
+                private modalController: ModalController,
+                private alertController: AlertController,
+                private navController: NavController) {
     }
 
     ngOnInit() {
@@ -73,8 +76,28 @@ export class EditSubwikiPage implements OnInit {
 
     private deleteFile() {
         if (this.imageRef && this.imageRef.name !== (this.subwiki ? this.subwiki.imageRef : '')) {
-            console.log('del');
             this.imageRef.delete();
         }
+    }
+
+    delete() {
+        this.alertController.create({
+            header: 'Delete Subwiki?',
+            buttons: [
+                {
+                    text: 'Cancel',
+                    role: 'cancel',
+                    cssClass: 'secondary'
+                },
+                {
+                    text: 'Delete',
+                    handler: () => {
+                        this.firestore.deleteSubwiki(this.subwiki.id);
+                        this.modalController.dismiss();
+                        this.navController.navigateForward('home');
+                    }
+                }
+            ]
+        }).then(alert => alert.present());
     }
 }

@@ -1,6 +1,6 @@
 <ion-header>
     <ion-toolbar>
-        <ion-title>CreateSubwiki</ion-title>
+        <ion-title><span *ngIf="subwiki">Edit</span><span *ngIf="!subwiki">Create</span> Subwiki</ion-title>
     </ion-toolbar>
 </ion-header>
 
@@ -21,4 +21,7 @@
     <ion-button (click)="cancel()">Cancel</ion-button>
     <ion-button *ngIf="subwiki" (click)="edit()">Edit</ion-button>
     <ion-button *ngIf="!subwiki" (click)="create()">Create</ion-button>
+    <div>
+        <ion-button *ngIf="subwiki" (click)="delete()" color="danger">Delete</ion-button>
+    </div>
 </ion-content>

@@ -76,6 +76,13 @@ export class FirestoreService {
         return subwikiRef.set(clone).then(() => subwikiRef.ref);
     }
 
+    deleteSubwiki(id: string) {
+        this.getPageInfosOfSubwikiById(id).then(pageInfos => {
+            pageInfos.forEach(pageInfo => this.deletePage(pageInfo));
+            this.subwikiCollection.doc(id).delete();
+        });
+    }
+
     public getPageInfo(id: string): Promise<PageInfo> {
         return this.pageInfoCollection.ref.doc(id).get().then(this.mapDocGet());
     }
