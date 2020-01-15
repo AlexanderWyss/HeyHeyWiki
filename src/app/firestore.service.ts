@@ -41,6 +41,14 @@ export class FirestoreService {
         return this.storage.ref(folder + '/' + uuid()).put(file);
     }
 
+    getStorageRef(folder: string, file: string) {
+        return this.storage.ref(folder).child(file);
+    }
+
+    getStorageRefMetadata(folder: string, file: string): Observable<any> {
+        return this.getStorageRef(folder, file).getMetadata();
+    }
+
     public getSubWiki(id: string): Observable<SubWiki> {
         return this.subwikiCollection.doc(id).snapshotChanges().pipe(this.mapDoc());
     }
@@ -59,6 +67,13 @@ export class FirestoreService {
         return this.subwikiCollection.add(subwiki).then(ref => {
             return this.createPageInternal(subwiki.name, '', true, ref.id).then(() => ref);
         });
+    }
+
+    updateSubWiki(subwiki: SubWiki): Promise<DocumentReference> {
+        const clone = {...subwiki};
+        const subwikiRef = this.subwikiCollection.doc(clone.id);
+        delete clone.id;
+        return subwikiRef.set(clone).then(() => subwikiRef.ref);
     }
 
     public getPageInfo(id: string): Promise<PageInfo> {

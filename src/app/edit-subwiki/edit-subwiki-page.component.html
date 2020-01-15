@@ -19,5 +19,6 @@
         <ion-label *ngIf="error" color="danger">{{error}}</ion-label>
     </ion-item>
     <ion-button (click)="cancel()">Cancel</ion-button>
-    <ion-button (click)="create()">Create</ion-button>
+    <ion-button *ngIf="subwiki" (click)="edit()">Edit</ion-button>
+    <ion-button *ngIf="!subwiki" (click)="create()">Create</ion-button>
 </ion-content>

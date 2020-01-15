@@ -14,15 +14,15 @@ import {AngularFirestoreModule} from '@angular/fire/firestore';
 import {AngularFireAuthModule} from '@angular/fire/auth';
 import {AngularFireStorageModule} from '@angular/fire/storage';
 import {QuillModule} from 'ngx-quill';
-import {CreateSubwikiPage} from './create-subwiki/create-subwiki.page';
-import {CreateSubwikiPageModule} from './create-subwiki/create-subwiki.module';
+import {EditSubwikiPage} from './edit-subwiki/edit-subwiki-page.component';
+import {EditSubwikiPageModule} from './edit-subwiki/edit-subwiki.module';
 import {CreatePagePageModule} from './create-page/create-page.module';
 import {CreatePagePage} from './create-page/create-page.page';
 import {AngularFireFunctionsModule, FUNCTIONS_REGION} from '@angular/fire/functions';
 
 @NgModule({
     declarations: [AppComponent],
-    entryComponents: [CreateSubwikiPage, CreatePagePage],
+    entryComponents: [EditSubwikiPage, CreatePagePage],
     imports: [
         BrowserModule,
         IonicModule.forRoot(),
@@ -33,7 +33,7 @@ import {AngularFireFunctionsModule, FUNCTIONS_REGION} from '@angular/fire/functi
         AngularFireStorageModule,
         AngularFireFunctionsModule,
         QuillModule.forRoot(),
-        CreateSubwikiPageModule,
+        EditSubwikiPageModule,
         CreatePagePageModule
     ],
     providers: [

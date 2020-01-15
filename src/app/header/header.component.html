@@ -4,11 +4,17 @@
             <ion-menu-button></ion-menu-button>
             <img class="toolbar-logo" src="../../assets/images/wickie_snap.png" alt="Wickie snap" (click)="home()">
         </ion-buttons>
-        <ion-title>
-            {{title}}
-        </ion-title>
-        <ion-searchbar *ngIf="searchBar" class="searchbar" slot="end" placeholder="Search Subwiki" inputmode="text" type="text"
-            [(ngModel)]="query" (keyup.enter)="search()"></ion-searchbar>
+        <div class="titleContainer">
+            <ion-title>
+                {{title}}
+            </ion-title>
+            <ion-button *ngIf="isSubwiki && user" size="small" (click)="editSubwiki()">
+                <ion-icon name="settings"></ion-icon>
+            </ion-button>
+        </div>
+        <ion-searchbar *ngIf="searchBar" class="searchbar" slot="end" placeholder="Search Subwiki" inputmode="text"
+                       type="text"
+                       [(ngModel)]="query" (keyup.enter)="search()"></ion-searchbar>
         <ion-buttons slot="end" class="buttons" *ngIf="!this.user">
             <ion-button (click)="signUp()">
                 Sign up

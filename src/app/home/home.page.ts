@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FirestoreService} from '../firestore.service';
 import {MenuController, ModalController, NavController} from '@ionic/angular';
 import {SubWiki} from '../_models/sub-wiki';
-import {CreateSubwikiPage} from '../create-subwiki/create-subwiki.page';
+import {EditSubwikiPage} from '../edit-subwiki/edit-subwiki-page.component';
 import { AuthService } from '../auth.service';
 
 
@@ -68,7 +68,7 @@ export class HomePage implements OnInit {
 
     createSubwiki() {
         this.modalController.create({
-            component: CreateSubwikiPage
+            component: EditSubwikiPage
         }).then(modal => {
             modal.onDidDismiss().then(result => {
                 if (result.data) {

@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { CreateSubwikiPage } from './create-subwiki.page';
+import { EditSubwikiPage } from './edit-subwiki-page.component';
 
 describe('CreateSubwikiPage', () => {
-  let component: CreateSubwikiPage;
-  let fixture: ComponentFixture<CreateSubwikiPage>;
+  let component: EditSubwikiPage;
+  let fixture: ComponentFixture<EditSubwikiPage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CreateSubwikiPage ],
+      declarations: [ EditSubwikiPage ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(CreateSubwikiPage);
+    fixture = TestBed.createComponent(EditSubwikiPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

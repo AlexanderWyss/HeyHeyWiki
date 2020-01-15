@@ -4,7 +4,7 @@ import {FormsModule} from '@angular/forms';
 
 import {IonicModule} from '@ionic/angular';
 
-import {CreateSubwikiPage} from './create-subwiki.page';
+import {EditSubwikiPage} from './edit-subwiki-page.component';
 import {RouterModule} from '@angular/router';
 
 @NgModule({
@@ -14,10 +14,10 @@ import {RouterModule} from '@angular/router';
         IonicModule,
         RouterModule.forChild([{
             path: '',
-            component: CreateSubwikiPage
+            component: EditSubwikiPage
         }])
     ],
-    declarations: [CreateSubwikiPage]
+    declarations: [EditSubwikiPage]
 })
-export class CreateSubwikiPageModule {
+export class EditSubwikiPageModule {
 }
