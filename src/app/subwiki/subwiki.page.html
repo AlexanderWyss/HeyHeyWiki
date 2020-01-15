@@ -1,7 +1,13 @@
 <!--suppress TypeScriptValidateTypes -->
 <app-header [title]="subwiki" [searchBar]="true"></app-header>
 
-<ion-content>
+<ion-content *ngIf="!page">
+    <div class="spinner-container">
+        <ion-spinner name="dots"></ion-spinner>
+    </div>
+</ion-content>
+
+<ion-content *ngIf="page">
     <ion-fab vertical="top" horizontal="end" slot="fixed">
         <ion-row>
             <ion-col>
