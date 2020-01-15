@@ -40,6 +40,8 @@ export class HomePage implements OnInit {
         this.auth.getUser().subscribe(user => {
             if (user) {
                 this.isAuthenticated = true;
+            } else {
+                this.isAuthenticated = false;
             }
         });
     }

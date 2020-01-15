@@ -20,7 +20,7 @@ export class SubwikiPage implements OnInit {
     page: Page;
     pageInfo: PageInfo;
 
-    isAuthenticated = false;
+    public isAuthenticated = false;
 
     constructor(
         private menuController: MenuController,
@@ -47,6 +47,8 @@ export class SubwikiPage implements OnInit {
         this.auth.getUser().subscribe(user => {
             if (user) {
                 this.isAuthenticated = true;
+            } else {
+                this.isAuthenticated = false;
             }
         });
     }

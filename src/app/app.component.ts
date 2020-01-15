@@ -1,12 +1,13 @@
-import {Component} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import {ModalController, NavController, Platform} from '@ionic/angular';
-import {SplashScreen} from '@ionic-native/splash-screen/ngx';
-import {StatusBar} from '@ionic-native/status-bar/ngx';
-import {FirestoreService} from './firestore.service';
-import {ResolveEnd, Router} from '@angular/router';
-import {PageInfo} from './_models/pageInfo';
-import {CreatePagePage} from './create-page/create-page.page';
+import { ModalController, NavController, Platform } from '@ionic/angular';
+import { SplashScreen } from '@ionic-native/splash-screen/ngx';
+import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { FirestoreService } from './firestore.service';
+import { ResolveEnd, Router } from '@angular/router';
+import { PageInfo } from './_models/pageInfo';
+import { CreatePagePage } from './create-page/create-page.page';
+import { AuthService } from './auth.service';
 
 interface Category {
     name: string;
@@ -19,10 +20,12 @@ interface Category {
     templateUrl: 'app.component.html',
     styleUrls: ['app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
     public appPages: Category[] = [];
     public name: string;
     private content: PageInfo[];
+
+    public isAuthenticated = false;
 
     constructor(
         private platform: Platform,
@@ -31,7 +34,8 @@ export class AppComponent {
         private firestore: FirestoreService,
         private router: Router,
         private navController: NavController,
-        private modalController: ModalController
+        private modalController: ModalController,
+        private auth: AuthService,
     ) {
         this.initializeApp();
     }
@@ -57,6 +61,13 @@ export class AppComponent {
                         });
                     }
                 }
+            }
+        });
+        this.auth.getUser().subscribe(user => {
+            if (user) {
+                this.isAuthenticated = true;
+            } else {
+                this.isAuthenticated = false;
             }
         });
     }
