@@ -14,6 +14,7 @@ import {ReemittingObserver} from './ReemittingObserver';
 import {PageInfo} from './_models/pageInfo';
 import {v4 as uuid} from 'uuid';
 import {Page} from './_models/page';
+import {Unsubscribe} from 'firebase';
 
 @Injectable({
     providedIn: 'root'
@@ -79,8 +80,8 @@ export class FirestoreService {
         return this.pageInfoCollection.ref.where('subwikiRef', '==', id).get().then(this.mapGet());
     }
 
-    listenPageInfosOfSubwikiByName(subwikiName: string, callbackfn: (value: PageInfo[]) => void): void {
-        this.getSubWikiByName(subwikiName).then(subwiki => this.pageInfoCollection.ref
+    listenPageInfosOfSubwikiByName(subwikiName: string, callbackfn: (value: PageInfo[]) => void): Promise<Unsubscribe> {
+        return this.getSubWikiByName(subwikiName).then(subwiki => this.pageInfoCollection.ref
             .where('subwikiRef', '==', subwiki.id)
             .onSnapshot(snapshot => callbackfn(snapshot.docs.map(this.mapDocGet()))));
     }
