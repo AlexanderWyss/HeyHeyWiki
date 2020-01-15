@@ -20,7 +20,7 @@ interface Category {
     templateUrl: 'app.component.html',
     styleUrls: ['app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
     public appPages: Category[] = [];
     public name: string;
     private content: PageInfo[];
