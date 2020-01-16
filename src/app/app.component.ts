@@ -61,7 +61,7 @@ export class AppComponent {
                             this.content = pageInfos;
                             this.appPages = [];
                             pageInfos.forEach(page => {
-                                this.addCategory(page);
+                                this.addPage(page);
                             });
                         });
                     }
@@ -77,7 +77,7 @@ export class AppComponent {
         });
     }
 
-    private addCategory(page) {
+    private addPage(page) {
         if (this.appPages[page.category] === undefined) {
             this.appPages[page.category] = {
                 name: page.category,
