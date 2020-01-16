@@ -8,19 +8,19 @@ const db = admin.firestore();
 // // https://firebase.google.com/docs/functions/typescript
 //
 export const search = functions.region('europe-west2').https.onCall((data, context) => {
+    console.log(data);
     const result = [];
     data.query = data.query.toLowerCase();
     return db.collection('subwiki').where('name', '==', data.subwiki).get().then(subwiki => {
-        const contentRef = subwiki.docs[0].data().contentRef;
-        return db.doc('content/' + contentRef).get().then(async content => {
-            for(const pageContent of content.data().pages) {
-                if (pageContent.title.toLocaleLowerCase().includes(data.query)) {
-                    result.push(pageContent.title);
+        return db.collection('pageinfo').where('subwikiRef', '==', subwiki.docs[0].ref.id).get().then(async pageInfos => {
+            for (const pageQuerySnapshot of pageInfos.docs) {
+                const pageInfo = pageQuerySnapshot.data();
+                if (pageInfo.title.toLocaleLowerCase().includes(data.query)) {
+                    result.push(pageInfo.title);
                 } else {
-                   const page =  await db.doc('page/' + pageContent.pageContentRef).get();
+                   const page =  await db.doc('page/' + pageInfo.pageRef).get();
                    if(JSON.stringify(page.data()).toLowerCase().includes(data.query)) {
-                       result.push(pageContent.title);
-                       // TODO do not find query in variable name
+                       result.push(pageInfo.title);
                    }
                 }
             }

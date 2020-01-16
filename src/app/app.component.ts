@@ -105,7 +105,6 @@ export class AppComponent {
             }
         }).then(modal => {
             modal.onDidDismiss().then(result => {
-                this.addCategory(result.data.page);
                 this.navigate(result.data.page);
             });
             modal.present();
