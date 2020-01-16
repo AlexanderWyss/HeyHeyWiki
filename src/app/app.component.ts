@@ -6,7 +6,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { FirestoreService } from './firestore.service';
 import { ResolveEnd, Router } from '@angular/router';
 import { PageInfo } from './_models/pageInfo';
-import { CreatePagePage } from './create-page/create-page.page';
+import { EditPagePage } from './edit-page/edit-page-page.component';
 import { AuthService } from './auth.service';
 
 interface Category {
@@ -99,7 +99,7 @@ export class AppComponent {
 
     createPage() {
         this.modalController.create({
-            component: CreatePagePage,
+            component: EditPagePage,
             componentProps: {
                 subwikiName: this.name
             }

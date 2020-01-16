@@ -16,13 +16,13 @@ import {AngularFireStorageModule} from '@angular/fire/storage';
 import {QuillModule} from 'ngx-quill';
 import {EditSubwikiPage} from './edit-subwiki/edit-subwiki-page.component';
 import {EditSubwikiPageModule} from './edit-subwiki/edit-subwiki.module';
-import {CreatePagePageModule} from './create-page/create-page.module';
-import {CreatePagePage} from './create-page/create-page.page';
+import {EditPagePageModule} from './edit-page/edit-page.module';
+import {EditPagePage} from './edit-page/edit-page-page.component';
 import {AngularFireFunctionsModule, FUNCTIONS_REGION} from '@angular/fire/functions';
 
 @NgModule({
     declarations: [AppComponent],
-    entryComponents: [EditSubwikiPage, CreatePagePage],
+    entryComponents: [EditSubwikiPage, EditPagePage],
     imports: [
         BrowserModule,
         IonicModule.forRoot(),
@@ -34,7 +34,7 @@ import {AngularFireFunctionsModule, FUNCTIONS_REGION} from '@angular/fire/functi
         AngularFireFunctionsModule,
         QuillModule.forRoot(),
         EditSubwikiPageModule,
-        CreatePagePageModule
+        EditPagePageModule
     ],
     providers: [
         StatusBar,

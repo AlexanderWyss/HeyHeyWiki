@@ -132,6 +132,13 @@ export class FirestoreService {
         return this.createPageInternal(title, category, false, subwikiRef);
     }
 
+    updatePageInfo(pageInfo: PageInfo) {
+        const clone = {...pageInfo};
+        const pageInfoRef = this.pageInfoCollection.doc(clone.id);
+        delete clone.id;
+        return pageInfoRef.set(clone).then(() => pageInfoRef.ref);
+    }
+
     updatePage(page: Page) {
         const clone = {...page};
         const pageRef = this.pageCollection.doc(clone.id);

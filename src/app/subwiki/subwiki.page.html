@@ -23,9 +23,9 @@
                     <ion-icon name="add"></ion-icon>
                 </ion-fab-button>
             </ion-col>
-            <ion-col *ngIf="editing && !pageInfo.home">
-                <ion-fab-button *ngIf="editing" size="small"  color="danger" (click)="deletePage()">
-                    <ion-icon name="trash"></ion-icon>
+            <ion-col *ngIf="editing">
+                <ion-fab-button *ngIf="editing" size="small" (click)="settings()">
+                    <ion-icon name="settings"></ion-icon>
                 </ion-fab-button>
             </ion-col>
         </ion-row>

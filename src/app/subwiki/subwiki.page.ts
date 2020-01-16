@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {AlertController, MenuController, NavController} from '@ionic/angular';
+import {AlertController, MenuController, ModalController, NavController} from '@ionic/angular';
 import {Row} from '../_models/row';
 import {EditableNode, Node} from '../_models/node';
 import {Paragraph} from '../_models/paragraph';
@@ -8,6 +8,8 @@ import {FirestoreService} from '../firestore.service';
 import {AuthService} from '../auth.service';
 import {PageInfo} from '../_models/pageInfo';
 import {Page} from '../_models/page';
+import {EditSubwikiPage} from '../edit-subwiki/edit-subwiki-page.component';
+import {EditPagePage} from '../edit-page/edit-page-page.component';
 
 @Component({
     selector: 'app-subwiki',
@@ -29,6 +31,7 @@ export class SubwikiPage implements OnInit {
         private firestore: FirestoreService,
         private auth: AuthService,
         private navController: NavController,
+        private modalController: ModalController
     ) {
     }
 
@@ -184,23 +187,24 @@ export class SubwikiPage implements OnInit {
         (node.value as Row[]).splice(rowIndex, 1);
     }
 
-    deletePage() {
-        this.alertController.create({
-            header: 'Delete Page?',
-            buttons: [
-                {
-                    text: 'Cancel',
-                    role: 'cancel',
-                    cssClass: 'secondary'
-                },
-                {
-                    text: 'Delete',
-                    handler: () => {
-                        this.firestore.deletePage(this.pageInfo);
-                        this.navController.navigateForward(['subwiki', this.subwiki]);
+    settings() {
+        this.modalController.create({
+            component: EditPagePage,
+            componentProps: {
+                pageInfo: this.pageInfo,
+                subwikiName: this.subwiki
+            }
+        }).then(modal => {
+            modal.onDidDismiss().then(result => {
+                if (result.data) {
+                    if (result.data.page) {
+                        this.navController.navigateForward(['subwiki', result.data.subwiki, result.data.page.title]);
+                    } else {
+                        this.navController.navigateForward(['subwiki', result.data.subwiki]);
                     }
                 }
-            ]
-        }).then(alert => alert.present());
+            });
+            modal.present();
+        });
     }
 }
