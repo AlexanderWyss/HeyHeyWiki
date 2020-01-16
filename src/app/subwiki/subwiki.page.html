@@ -44,6 +44,18 @@
                     <quill-view *ngIf="!node.editing" [content]="node.value"
                                 (click)="startEditing(node)"></quill-view>
                 </div>
+                <div *ngIf="node.type === 'img'">
+                    <img [src]="node.value | resolveStorage: 'page' | async">
+                    <ion-item *ngIf="editing">
+                        <ion-label>Image</ion-label>
+                        <input (change)="uploadFile($event, node)" type="file" accept="image/*"/>
+                        <ion-spinner *ngIf="node.uploading"></ion-spinner>
+                        <ion-icon *ngIf="!node.uploading" name="checkmark" color="success"></ion-icon>
+                    </ion-item>
+                    <ion-button *ngIf="editing" (click)="removeNode(paragraphKey, nodeKey)" color="danger">
+                        <ion-icon name="trash"></ion-icon>
+                    </ion-button>
+                </div>
                 <div class="grid" *ngIf="node.type === 'grid'">
                     <ion-grid (click)="startEditing(node)">
                         <ion-row *ngFor="let row of asRowArray(node.value); let rowIndex = index">
@@ -51,7 +63,8 @@
                                 <p *ngIf="!node.editing">{{cell.value}}</p>
                                 <ion-item *ngIf="node.editing">
                                     <ion-input [(ngModel)]="cell.value"></ion-input>
-                                    <ion-button slot="end" (click)="removeCell(node, rowIndex, colIndex)" color="danger">
+                                    <ion-button slot="end" (click)="removeCell(node, rowIndex, colIndex)"
+                                                color="danger">
                                         <ion-icon name="trash"></ion-icon>
                                     </ion-button>
                                 </ion-item>
@@ -86,6 +99,9 @@
             <ion-buttons *ngIf="editing">
                 <ion-fab-button size="small" (click)="addText(paragraph)">
                     <ion-icon name="list"></ion-icon>
+                </ion-fab-button>
+                <ion-fab-button size="small" (click)="addImg(paragraph)">
+                    <ion-icon name="image"></ion-icon>
                 </ion-fab-button>
                 <ion-fab-button size="small" (click)="addGrid(paragraph)">
                     <ion-icon name="grid"></ion-icon>

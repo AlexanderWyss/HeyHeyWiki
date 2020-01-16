@@ -74,7 +74,10 @@ export class SubwikiPage implements OnInit {
     }
 
     stripNodeEditingAttribute() {
-        this.page.paragraphs.forEach(para => para.nodes.forEach(node => delete node.editing));
+        this.page.paragraphs.forEach(para => para.nodes.forEach(node => {
+            delete node.editing;
+            delete node.uploading;
+        }));
     }
 
     addParagraph() {
@@ -95,6 +98,14 @@ export class SubwikiPage implements OnInit {
             value: '',
             type: 'text',
             editing: true
+        });
+    }
+
+    addImg(paragraph: Paragraph) {
+        this.stopEditingAll();
+        paragraph.nodes.push({
+            value: '',
+            type: 'img',
         });
     }
 
@@ -127,7 +138,7 @@ export class SubwikiPage implements OnInit {
     }
 
     isEmpty(node: Node) {
-        if (node.type === 'text') {
+        if (node.type === 'text' || node.type === 'img') {
             return !node.value || (node.value as string).trim() === '';
         } else if (node.type === 'grid') {
             return !node.value || (node.value as Row[])
@@ -206,5 +217,20 @@ export class SubwikiPage implements OnInit {
             });
             modal.present();
         });
+    }
+
+    uploadFile(event, node: EditableNode) {
+        node.uploading = true;
+        this.firestore.uploadFile('page', event.target.files[0]).then(upload => {
+            if (node.value) {
+                this.deleteFile(node.value as string);
+            }
+            node.value = upload.ref.name;
+            node.uploading = false;
+        });
+    }
+
+    deleteFile(ref: string) {
+        this.firestore.getStorageRef('page', ref as string).delete();
     }
 }

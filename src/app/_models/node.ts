@@ -7,4 +7,5 @@ export interface Node {
 
 export interface EditableNode extends Node {
     editing?: boolean;
+    uploading?: boolean;
 }

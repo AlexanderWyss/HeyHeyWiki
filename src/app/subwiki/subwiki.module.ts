@@ -8,6 +8,7 @@ import { SubwikiPage } from './subwiki.page';
 import {RouterModule} from '@angular/router';
 import {HeaderModule} from '../header/header.module';
 import {QuillModule} from 'ngx-quill';
+import {PipeModule} from '../_pipes/pipe.module';
 
 @NgModule({
     imports: [
@@ -19,7 +20,8 @@ import {QuillModule} from 'ngx-quill';
             component: SubwikiPage
         }]),
         HeaderModule,
-        QuillModule
+        QuillModule,
+        PipeModule
     ],
   declarations: [SubwikiPage]
 })
