@@ -1,6 +1,12 @@
 <app-header [title]="subwiki" [isSubwiki]="true"></app-header>
 
-<ion-content>
+<ion-content *ngIf="!result">
+    <div class="spinner-container">
+        <ion-spinner name="dots"></ion-spinner>
+    </div>
+</ion-content>
+
+<ion-content *ngIf="result">
     <ion-searchbar class="searchbar" placeholder="Search Subwiki" inputmode="text" type="text"
                    [(ngModel)]="query" (keyup.enter)="search()" [debounce]="0"></ion-searchbar>
     <ion-list>
